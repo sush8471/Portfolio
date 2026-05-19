@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { usePrefersReducedMotion } from "./usePrefersReducedMotion";
 
 // Register ScrollTrigger so GSAP can use it
 gsap.registerPlugin(ScrollTrigger);
@@ -12,6 +13,7 @@ export default function ScrollVideoComponent() {
   // Refs for the animated text overlays
   const text1Ref = useRef<HTMLDivElement>(null);
   const text2Ref = useRef<HTMLDivElement>(null);
+  const reducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -52,7 +54,7 @@ export default function ScrollVideoComponent() {
       let drawHeight = canvasHeight;
       let offsetX = 0;
       let offsetY = 0;
-
+ 
       if (imgRatio > canvasRatio) {
         // Image is proportionally wider than the canvas
         drawWidth = canvasHeight * imgRatio;
@@ -95,6 +97,28 @@ export default function ScrollVideoComponent() {
       } else {
         images[0].onload = renderImage;
       }
+    }
+
+    // If reduced motion is active, skip all ScrollTrigger/scrub timelines
+    if (reducedMotion) {
+      const tl = gsap.timeline();
+      tl.fromTo(text1Ref.current, 
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }
+      )
+      .to(text1Ref.current, 
+        { opacity: 0, y: -20, duration: 0.6, ease: "power2.in" },
+        "+=1.8"
+      )
+      .fromTo(text2Ref.current,
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }
+      );
+
+      return () => {
+        window.removeEventListener("resize", handleResize);
+        tl.kill();
+      };
     }
 
     // ==========================================
@@ -165,7 +189,7 @@ export default function ScrollVideoComponent() {
       videoTl.kill();
       textTl.kill();
     };
-  }, []);
+  }, [reducedMotion]);
 
   return (
     // 1. Container Section: 200vh track height for Hero presentation.

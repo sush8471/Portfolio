@@ -3,6 +3,8 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ExternalLink } from 'lucide-react';
 
+import { usePrefersReducedMotion } from './usePrefersReducedMotion';
+
 interface Project {
   title: string;
   description: string;
@@ -73,8 +75,20 @@ const ProjectsSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const reducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
+    if (reducedMotion) {
+      gsap.set(
+        [
+          ...(headerRef.current?.children || []),
+          ...cardsRef.current.filter(Boolean),
+        ],
+        { opacity: 1, y: 0, rotateX: 0 }
+      );
+      return;
+    }
+
     const ctx = gsap.context(() => {
       // Header animation
       gsap.fromTo(
@@ -122,7 +136,7 @@ const ProjectsSection = () => {
     }, sectionRef);
 
     return () => ctx.revert();
-  }, []);
+  }, [reducedMotion]);
 
   return (
     <section

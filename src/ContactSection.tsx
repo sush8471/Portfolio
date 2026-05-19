@@ -3,6 +3,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Mail, ArrowUpRight, Send } from 'lucide-react';
 import MagneticButton from './MagneticButton';
+import { usePrefersReducedMotion } from './usePrefersReducedMotion';
 import WebVitalsBadge from './WebVitalsBadge';
 
 const GithubIcon = ({ size = 20 }: { size?: number }) => (
@@ -37,8 +38,17 @@ const ContactSection = () => {
   const [formState, setFormState] = useState({ name: '', email: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const reducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
+    if (reducedMotion) {
+      gsap.set(
+        contentRef.current?.children || [],
+        { opacity: 1, y: 0 }
+      );
+      return;
+    }
+
     const ctx = gsap.context(() => {
       gsap.fromTo(
         contentRef.current?.children || [],
@@ -59,7 +69,7 @@ const ContactSection = () => {
     }, sectionRef);
 
     return () => ctx.revert();
-  }, []);
+  }, [reducedMotion]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

@@ -1,13 +1,27 @@
 import { useRef, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { usePrefersReducedMotion } from './usePrefersReducedMotion';
+import MagneticButton from './MagneticButton';
 
 const AboutSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const bioRef = useRef<HTMLDivElement>(null);
+  const reducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
+    if (reducedMotion) {
+      gsap.set(
+        [
+          headingRef.current,
+          ...(bioRef.current?.children || []),
+        ],
+        { opacity: 1, y: 0 }
+      );
+      return;
+    }
+
     const ctx = gsap.context(() => {
       // Heading reveal
       gsap.fromTo(
@@ -48,7 +62,7 @@ const AboutSection = () => {
     }, sectionRef);
 
     return () => ctx.revert();
-  }, []);
+  }, [reducedMotion]);
 
   return (
     <section
@@ -88,18 +102,20 @@ const AboutSection = () => {
           </p>
 
           <div className="flex flex-wrap justify-center gap-4 pt-6">
-            <a
+            <MagneticButton
+              as="a"
               href="#projects"
-              className="group relative overflow-hidden rounded-full bg-white px-8 py-3 text-sm font-semibold text-black transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,255,255,0.3)]"
+              className="rounded-full bg-white px-8 py-3 text-sm font-semibold text-black transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,255,255,0.3)]"
             >
-              <span className="relative z-10">Explore My Work</span>
-            </a>
-            <a
+              Explore My Work
+            </MagneticButton>
+            <MagneticButton
+              as="a"
               href="#contact"
               className="rounded-full border border-zinc-700 bg-transparent px-8 py-3 text-sm font-semibold text-white transition-all duration-300 hover:border-zinc-500 hover:bg-zinc-900"
             >
               Get in Touch
-            </a>
+            </MagneticButton>
           </div>
         </div>
       </div>

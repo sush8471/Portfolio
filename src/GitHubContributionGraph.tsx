@@ -3,6 +3,8 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { GitCommit, Flame, Calendar, TrendingUp } from 'lucide-react';
 
+import { usePrefersReducedMotion } from './usePrefersReducedMotion';
+
 interface ContributionDay {
   date: string;
   count: number;
@@ -99,6 +101,7 @@ const GitHubContributionGraph: React.FC<GitHubContributionGraphProps> = ({
   const [data, setData] = useState<GraphData | null>(null);
   const [loading, setLoading] = useState(true);
   const [hoveredCell, setHoveredCell] = useState<{ x: number; y: number; day: ContributionDay } | null>(null);
+  const reducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
     const fetchContributions = async () => {
@@ -185,6 +188,18 @@ const GitHubContributionGraph: React.FC<GitHubContributionGraphProps> = ({
   useEffect(() => {
     if (!data) return;
     
+    if (reducedMotion) {
+      gsap.set(
+        [
+          ...(headerRef.current?.children || []),
+          ...(statsRef.current?.children || []),
+          graphContainerRef.current,
+        ],
+        { opacity: 1, y: 0, scale: 1 }
+      );
+      return;
+    }
+    
     const ctx = gsap.context(() => {
       // Header animation
       gsap.fromTo(
@@ -242,7 +257,7 @@ const GitHubContributionGraph: React.FC<GitHubContributionGraphProps> = ({
     }, sectionRef);
 
     return () => ctx.revert();
-  }, [data]);
+  }, [data, reducedMotion]);
 
   const stats = useMemo(() => {
     if (!data) return [];

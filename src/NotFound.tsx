@@ -3,15 +3,15 @@ import { gsap } from 'gsap';
 import { ArrowLeft } from 'lucide-react';
 import MagneticButton from './MagneticButton';
 
+import { usePrefersReducedMotion } from './usePrefersReducedMotion';
+
 const NotFound = () => {
   const numberRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
   const btnRef = useRef<HTMLDivElement>(null);
+  const reducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
-    const reducedMotion = window.matchMedia(
-      '(prefers-reduced-motion: reduce)'
-    ).matches;
     const els = [numberRef.current, textRef.current, btnRef.current].filter(
       Boolean
     );
@@ -43,7 +43,7 @@ const NotFound = () => {
     return () => {
       tl.kill();
     };
-  }, []);
+  }, [reducedMotion]);
 
   return (
     <div className="relative z-10 flex min-h-screen items-center justify-center overflow-hidden bg-black px-6">

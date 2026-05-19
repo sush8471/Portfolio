@@ -13,6 +13,7 @@ import {
   Brain,
   Workflow,
 } from 'lucide-react';
+import { usePrefersReducedMotion } from './usePrefersReducedMotion';
 
 type ToolSize = 'small' | 'wide' | 'tall' | 'large';
 
@@ -103,8 +104,20 @@ const StackBentoGrid = () => {
   const headerRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const reducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
+    if (reducedMotion) {
+      gsap.set(
+        [
+          ...(headerRef.current?.children || []),
+          ...cardsRef.current.filter(Boolean),
+        ],
+        { opacity: 1, y: 0, scale: 1 }
+      );
+      return;
+    }
+
     const ctx = gsap.context(() => {
       // Header entrance
       gsap.fromTo(
@@ -145,9 +158,10 @@ const StackBentoGrid = () => {
     }, sectionRef);
 
     return () => ctx.revert();
-  }, []);
+  }, [reducedMotion]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (reducedMotion) return;
     const el = e.currentTarget;
     const rect = el.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -161,6 +175,7 @@ const StackBentoGrid = () => {
   };
 
   const handleMouseLeave = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (reducedMotion) return;
     e.currentTarget.style.transform =
       'perspective(1000px) rotateY(0deg) rotateX(0deg) scale3d(1, 1, 1)';
   };

@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Quote } from 'lucide-react';
+import { usePrefersReducedMotion } from './usePrefersReducedMotion';
 
 interface Testimonial {
   quote: string;
@@ -39,10 +40,28 @@ const TestimonialsSection = () => {
   const headerRef = useRef<HTMLDivElement>(null);
   const wrappersRef = useRef<(HTMLDivElement | null)[]>([]);
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const reducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
+
+    // Reset wrapper transforms if reduced motion is active
+    if (reducedMotion) {
+      wrappersRef.current.forEach((wrapper) => {
+        if (wrapper) {
+          wrapper.style.transform = '';
+        }
+      });
+      gsap.set(
+        [
+          ...(headerRef.current?.children || []),
+          ...cardsRef.current.filter(Boolean),
+        ],
+        { opacity: 1, y: 0, scale: 1 }
+      );
+      return;
+    }
 
     // Mouse parallax drift
     const onMove = (e: MouseEvent) => {
@@ -105,7 +124,7 @@ const TestimonialsSection = () => {
       section.removeEventListener('mousemove', onMove);
       ctx.revert();
     };
-  }, []);
+  }, [reducedMotion]);
 
   return (
     <section

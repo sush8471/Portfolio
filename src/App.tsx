@@ -7,24 +7,24 @@ import AboutSection from './AboutSection';
 import StackBentoGrid from './StackBentoGrid';
 import GitHubContributionGraph from './GitHubContributionGraph';
 import ProjectsSection from './ProjectsSection';
+import CertificationsSection from './CertificationsSection';
 import TestimonialsSection from './TestimonialsSection';
 import ContactSection from './ContactSection';
 import NoiseOverlay from './NoiseOverlay';
+
+import { usePrefersReducedMotion } from './usePrefersReducedMotion';
 
 gsap.registerPlugin(ScrollTrigger);
 
 function App() {
   const lenisRef = useRef<Lenis | null>(null);
+  const reducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
-    const prefersReducedMotion = window.matchMedia(
-      '(prefers-reduced-motion: reduce)'
-    ).matches;
-
     let lenis: Lenis | null = null;
     let rafCallback: ((time: number) => void) | null = null;
 
-    if (!prefersReducedMotion) {
+    if (!reducedMotion) {
       lenis = new Lenis({
         duration: 1.2,
         easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -66,7 +66,7 @@ function App() {
       }
       ScrollTrigger.getAll().forEach((t) => t.kill());
     };
-  }, []);
+  }, [reducedMotion]);
 
   return (
     <main className="relative bg-black text-white antialiased selection:bg-white/20 selection:text-white">
@@ -90,6 +90,7 @@ function App() {
       <ScrollVideoComponent />
       <AboutSection />
       <StackBentoGrid />
+      <CertificationsSection />
       <GitHubContributionGraph username="sush8471" />
       <ProjectsSection />
       <TestimonialsSection />
