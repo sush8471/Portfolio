@@ -147,7 +147,6 @@ export default function ScrollVideoComponent() {
     // ==========================================
     
     // Smooth entrance animation on page load for the first text spotlight
-    // Smooth entrance animation on page load for the first text spotlight
     gsap.fromTo(text1Ref.current, 
       { opacity: 0, y: 15 },
       { opacity: 1, y: 0, duration: 1.2, ease: "power3.out", delay: 0.3 }
@@ -164,16 +163,21 @@ export default function ScrollVideoComponent() {
     });
 
     // Fade out the first text spotlight as user scrolls down (0% to 25% scroll)
-    textTl.to(text1Ref.current, {
-      opacity: 0,
-      y: -15,
-      duration: 0.2
-    }, 0.05);
+    textTl.fromTo(text1Ref.current,
+      { opacity: 1, y: 0 },
+      {
+        opacity: 0,
+        y: -15,
+        duration: 0.2,
+        immediateRender: false
+      },
+      0.05
+    );
 
     // Fade in the second text overlay (Name, Subtitle, Socials) as user scrubs further (45% to 70% scroll)
     textTl.fromTo(text2Ref.current,
       { opacity: 0, y: 15 },
-      { opacity: 1, y: 0, duration: 0.25 },
+      { opacity: 1, y: 0, duration: 0.25, immediateRender: false },
       0.4
     );
 
@@ -181,7 +185,8 @@ export default function ScrollVideoComponent() {
     textTl.to(text2Ref.current, {
       opacity: 0,
       y: -15,
-      duration: 0.2
+      duration: 0.2,
+      immediateRender: false
     }, 0.75);
 
     // Cleanup listeners and triggers on unmount
