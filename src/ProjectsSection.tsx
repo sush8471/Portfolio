@@ -18,8 +18,8 @@ const projects: Project[] = [
   {
     title: 'ResumeDEX',
     description:
-      'An automated and intelligent resume screening and categorization application that processes resumes and matches candidates efficiently.',
-    image: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&q=80',
+      'An automated AI-powered resume screening and optimization platform built to parse resumes against job descriptions and boost interview matching rates.',
+    image: '/images/projects/resumedex.png',
     tags: ['Python', 'Claude', 'n8n', 'Supabase'],
     githubUrl: '#',
     liveUrl: 'https://resumedex.vercel.app/',
@@ -27,8 +27,8 @@ const projects: Project[] = [
   {
     title: 'ReplyDEX',
     description:
-      'A smart email and message assistant that drafts contextual replies based on incoming mail, using advanced language modeling for communication speed.',
-    image: 'https://images.unsplash.com/photo-1557200134-90327ee9fafa?w=800&q=80',
+      'An intelligent AI engine for review management and customer support automation, generating context-aware and personalized responses.',
+    image: '/images/projects/replydex.png',
     tags: ['n8n', 'Claude', 'Supabase', 'Python'],
     githubUrl: '#',
     liveUrl: 'https://replydex.vercel.app/',
@@ -36,8 +36,8 @@ const projects: Project[] = [
   {
     title: 'Flydexify',
     description:
-      'An end-to-end cloud infrastructure monitoring system that visualizes real-time performance clusters and automates metric tracking dashboards.',
-    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80',
+      'A vibe-based AI music recommendation service that analyzes uploaded images and language preferences to discover matching songs.',
+    image: '/images/projects/flydexify.png',
     tags: ['React', 'Supabase', 'Python', 'n8n'],
     githubUrl: '#',
     liveUrl: 'https://flydexify.vercel.app/',
@@ -45,8 +45,8 @@ const projects: Project[] = [
   {
     title: 'FlydexGPT',
     description:
-      'A premium LLM-powered virtual conversational interface with agentic search tools, providing tailored responses with deep semantic accuracy.',
-    image: 'https://images.unsplash.com/photo-1677442136019-21780efad99a?w=800&q=80',
+      'A premium LLM conversational interface with customizable templates and multi-model support for specialized development queries.',
+    image: '/images/projects/flydexgpt.png',
     tags: ['Python', 'Claude', 'Supabase', 'TypeScript'],
     githubUrl: '#',
     liveUrl: 'https://flydexgpt.vercel.app/',
@@ -54,8 +54,8 @@ const projects: Project[] = [
   {
     title: 'Flydex Nutrients Analyzer',
     description:
-      'A computer-vision-based dietary diagnostic tool that processes food images to analyze macronutrient ratios and calculate calorie indexes dynamically.',
-    image: 'https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=800&q=80',
+      'An AI-powered computer-vision application designed to analyze meal photos for instant nutritional insights with Harvard-certified precision.',
+    image: '/images/projects/flydex-nutrients-analyzer.png',
     tags: ['Python', 'Claude', 'JavaScript', 'HTML'],
     githubUrl: '#',
     liveUrl: 'https://flydex-nutrients-analyzer.vercel.app/',
@@ -63,8 +63,8 @@ const projects: Project[] = [
   {
     title: 'Flydon Dashboard',
     description:
-      'A clean and minimalist operational bento-dashboard consolidating visual telemetry, system status registers, and pipeline execution maps.',
-    image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&q=80',
+      'A real-time business intelligence and telemetry dashboard displaying operational stats, revenue metrics, and automated performance pipelines.',
+    image: '/images/projects/flydon-dashboard.png',
     tags: ['React', 'Supabase', 'Tailwind', 'Python'],
     githubUrl: '#',
     liveUrl: 'https://flydon-dashboard.vercel.app/',
