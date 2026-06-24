@@ -159,7 +159,7 @@ const CertificationsSection = () => {
           ref={gridRef}
           data-lenis-prevent
           className="flex overflow-x-auto md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 snap-x snap-mandatory scrollbar-none py-4 -mx-6 px-6 md:mx-0 md:px-0"
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', overscrollBehaviorY: 'auto', overscrollBehaviorX: 'contain' }}
         >
           {certifications.map((cert, index) => (
             <div
