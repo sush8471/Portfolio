@@ -236,10 +236,8 @@ const CertificationsSection = () => {
       {/* Premium Lightbox Modal */}
       {activeCert && (
         <ImageLightbox
-          image={activeCert.image}
-          title={activeCert.title}
-          issuer={activeCert.issuer}
-          verifyUrl={activeCert.verifyUrl}
+          certifications={certifications}
+          initialIndex={certifications.findIndex(c => c.credentialId === activeCert.credentialId)}
           onClose={() => setActiveCert(null)}
         />
       )}
