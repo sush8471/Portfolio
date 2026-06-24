@@ -11,7 +11,6 @@ export default function ScrollVideoComponent() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   
   // Refs for the animated text overlays
-  const text1Ref = useRef<HTMLDivElement>(null);
   const text2Ref = useRef<HTMLDivElement>(null);
   const reducedMotion = usePrefersReducedMotion();
 
@@ -102,15 +101,7 @@ export default function ScrollVideoComponent() {
     // If reduced motion is active, skip all ScrollTrigger/scrub timelines
     if (reducedMotion) {
       const tl = gsap.timeline();
-      tl.fromTo(text1Ref.current, 
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }
-      )
-      .to(text1Ref.current, 
-        { opacity: 0, y: -20, duration: 0.6, ease: "power2.in" },
-        "+=1.8"
-      )
-      .fromTo(text2Ref.current,
+      tl.fromTo(text2Ref.current,
         { opacity: 0, y: 20 },
         { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }
       );
@@ -146,8 +137,8 @@ export default function ScrollVideoComponent() {
     // 4. PORTFOLIO TEXT OVERLAYS ANIMATION (Entrance + Scroll Scrub)
     // ==========================================
     
-    // Smooth entrance animation on page load for the first text spotlight
-    gsap.fromTo(text1Ref.current, 
+    // Smooth entrance animation on page load for the name overlay
+    gsap.fromTo(text2Ref.current, 
       { opacity: 0, y: 15 },
       { opacity: 1, y: 0, duration: 1.2, ease: "power3.out", delay: 0.3 }
     );
@@ -162,32 +153,13 @@ export default function ScrollVideoComponent() {
       }
     });
 
-    // Fade out the first text spotlight as user scrolls down (0% to 25% scroll)
-    textTl.fromTo(text1Ref.current,
-      { opacity: 1, y: 0 },
-      {
-        opacity: 0,
-        y: -15,
-        duration: 0.2,
-        immediateRender: false
-      },
-      0.05
-    );
-
-    // Fade in the second text overlay (Name, Subtitle, Socials) as user scrubs further (45% to 70% scroll)
-    textTl.fromTo(text2Ref.current,
-      { opacity: 0, y: 15 },
-      { opacity: 1, y: 0, duration: 0.25, immediateRender: false },
-      0.4
-    );
-
-    // Fade out the second text overlay towards the end of the Hero container (80% to 95% scroll)
+    // Fade out the text overlay towards the end of the Hero container (60% to 90% scroll)
     textTl.to(text2Ref.current, {
       opacity: 0,
-      y: -15,
-      duration: 0.2,
+      y: -25,
+      duration: 0.4,
       immediateRender: false
-    }, 0.75);
+    }, 0.6);
 
     // Cleanup listeners and triggers on unmount
     return () => {
@@ -210,14 +182,7 @@ export default function ScrollVideoComponent() {
       {/* 3. Text Overlays layer (Sticky within the 200vh track) */}
       <div className="sticky top-0 left-0 w-full h-[100dvh] overflow-hidden flex items-center justify-center pointer-events-none z-10">
         
-        {/* Greeting Overlay (0 - 25%) */}
-        <div ref={text1Ref} className="absolute text-center opacity-0 text-white drop-shadow-lg px-4 w-full max-w-[90%] sm:max-w-xl md:max-w-3xl">
-          <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-tight">
-            Bridging Design & Engineering
-          </h1>
-        </div>
-        
-        {/* Portfolio Details Overlay (50 - 75%) */}
+        {/* Portfolio Details Overlay */}
         <div ref={text2Ref} className="absolute text-center opacity-0 text-white drop-shadow-2xl px-4 w-full max-w-[90%] sm:max-w-xl md:max-w-3xl">
           <h2 className="text-3xl sm:text-5xl md:text-7xl font-extrabold mb-2 md:mb-4 tracking-tight leading-tight">
             Sushant Chaudhary
