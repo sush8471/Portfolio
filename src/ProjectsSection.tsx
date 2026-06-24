@@ -164,15 +164,18 @@ const ProjectsSection = () => {
           </p>
         </div>
 
-        {/* Projects Grid */}
-        <div className="grid gap-8 md:grid-cols-2">
+        {/* Projects Grid / Horizontal Carousel for Mobile */}
+        <div
+          className="flex overflow-x-auto md:grid md:grid-cols-2 gap-8 snap-x snap-mandatory scrollbar-none py-4 -mx-6 px-6 md:mx-0 md:px-0"
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        >
           {projects.map((project, index) => (
             <div
               key={project.title}
               ref={(el) => {
                 cardsRef.current[index] = el;
               }}
-              className="group relative overflow-hidden rounded-2xl border border-zinc-800/50 bg-zinc-900/20 backdrop-blur-md transition-all duration-700 hover:border-zinc-700/50 hover:shadow-[0_0_40px_rgba(255,255,255,0.03)]"
+              className="snap-start shrink-0 w-[290px] sm:w-[340px] md:w-auto md:shrink group relative overflow-hidden rounded-2xl border border-zinc-800/50 bg-zinc-900/20 backdrop-blur-md transition-all duration-700 hover:border-zinc-700/50 hover:shadow-[0_0_40px_rgba(255,255,255,0.03)]"
               style={{ perspective: '1000px' }}
             >
               {/* Image Container */}
