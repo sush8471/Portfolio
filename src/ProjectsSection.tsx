@@ -4,6 +4,17 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ExternalLink } from 'lucide-react';
 
 import { usePrefersReducedMotion } from './usePrefersReducedMotion';
+import {
+  Stories,
+  StoriesContent,
+  Story,
+  StoryAuthor,
+  StoryAuthorImage,
+  StoryAuthorName,
+  StoryImage,
+  StoryOverlay,
+  StoryTitle,
+} from '@/components/ui/stories-carousel';
 
 interface Project {
   title: string;
@@ -84,7 +95,7 @@ const ProjectsSection = () => {
           ...(headerRef.current?.children || []),
           ...cardsRef.current.filter(Boolean),
         ],
-        { opacity: 1, y: 0, rotateX: 0 }
+        { opacity: 1, y: 0 }
       );
       return;
     }
@@ -108,31 +119,23 @@ const ProjectsSection = () => {
         }
       );
 
-      // Cards staggered reveal
-      cardsRef.current.forEach((card, i) => {
-        if (!card) return;
-        gsap.fromTo(
-          card,
-          {
-            opacity: 0,
-            y: 80,
-            rotateX: 10,
+      // Story Cards staggered reveal
+      gsap.fromTo(
+        cardsRef.current.filter(Boolean),
+        { opacity: 0, y: 60 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          stagger: 0.1,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: '.stories-trigger-container',
+            start: 'top 85%',
+            toggleActions: 'play none none reverse',
           },
-          {
-            opacity: 1,
-            y: 0,
-            rotateX: 0,
-            duration: 1,
-            delay: i * 0.15,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: card,
-              start: 'top 90%',
-              toggleActions: 'play none none reverse',
-            },
-          }
-        );
-      });
+        }
+      );
     }, sectionRef);
 
     return () => ctx.revert();
@@ -164,77 +167,64 @@ const ProjectsSection = () => {
           </p>
         </div>
 
-        {/* Projects Grid / Horizontal Carousel for Mobile */}
-        <div
+        {/* Stories carousel wrapper */}
+        <div 
+          className="stories-trigger-container w-full flex justify-center"
           data-lenis-prevent
-          className="flex overflow-x-auto md:grid md:grid-cols-2 gap-8 snap-x snap-mandatory scrollbar-none py-4 -mx-6 px-6 md:mx-0 md:px-0"
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', overscrollBehaviorY: 'auto', overscrollBehaviorX: 'contain' }}
+          style={{ overscrollBehaviorY: 'auto', overscrollBehaviorX: 'contain' }}
         >
-          {projects.map((project, index) => (
-            <div
-              key={project.title}
-              ref={(el) => {
-                cardsRef.current[index] = el;
-              }}
-              className="snap-start shrink-0 w-[290px] sm:w-[340px] md:w-auto md:shrink group relative overflow-hidden rounded-2xl border border-zinc-800/50 bg-zinc-900/20 backdrop-blur-md transition-all duration-700 hover:border-zinc-700/50 hover:shadow-[0_0_40px_rgba(255,255,255,0.03)]"
-              style={{ perspective: '1000px' }}
-            >
-              {/* Image Container */}
-              <div className="relative aspect-[16/10] overflow-hidden">
-                <div className="absolute inset-0 bg-zinc-800">
-                  <img
-                    src={project.image}
-                    alt={project.title}
-                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-                    loading="lazy"
-                  />
-                </div>
-                {/* Overlay gradient */}
-                <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 via-zinc-900/20 to-transparent opacity-60 transition-opacity duration-500 group-hover:opacity-40" />
-
-                {/* Floating action buttons */}
-                <div className="absolute right-4 top-4 flex gap-2 opacity-100 md:opacity-0 transition-all duration-500 md:group-hover:opacity-100 z-25">
-
+          <Stories className="max-w-full">
+            <StoriesContent className="px-4">
+              {projects.map((project, index) => (
+                <Story
+                  key={project.title}
+                  ref={(el) => {
+                    cardsRef.current[index] = el;
+                  }}
+                  className="aspect-[9/16] !w-[240px] sm:!w-[280px]"
+                  onClick={() => {
+                    if (project.liveUrl && project.liveUrl !== '#') {
+                      window.open(project.liveUrl, '_blank', 'noopener,noreferrer');
+                    }
+                  }}
+                >
+                  <StoryImage alt={project.title} src={project.image} className="object-cover" />
+                  
+                  {/* Floating external link badge */}
                   {project.liveUrl && project.liveUrl !== '#' && (
-                    <a
-                      href={project.liveUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex h-10 w-10 items-center justify-center rounded-full bg-black/60 backdrop-blur-md transition-colors hover:bg-white hover:text-black"
-                      aria-label="View live site"
-                    >
-                      <ExternalLink size={18} />
-                    </a>
+                    <div className="absolute right-3.5 top-3.5 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-black/60 border border-white/10 text-white backdrop-blur-md transition-colors hover:bg-white hover:text-black">
+                      <ExternalLink size={14} />
+                    </div>
                   )}
-                </div>
-              </div>
 
-              {/* Content */}
-              <div className="relative p-6 md:p-8">
-                <h3 className="mb-3 text-xl font-bold text-white transition-colors group-hover:text-zinc-200 md:text-2xl">
-                  {project.title}
-                </h3>
-                <p className="mb-6 text-sm leading-relaxed text-zinc-400 md:text-base">
-                  {project.description}
-                </p>
+                  <StoryOverlay side="top" className="h-24 from-black/70 to-transparent z-10" />
+                  <StoryOverlay side="bottom" className="h-36 from-black/90 to-transparent z-10" />
+                  
+                  {/* Title overlay */}
+                  <StoryTitle className="font-extrabold text-lg text-white pr-8 leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] z-10">
+                    {project.title}
+                  </StoryTitle>
 
-                {/* Tags */}
-                <div className="flex flex-wrap gap-2">
-                  {project.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="rounded-full border border-zinc-700/50 bg-zinc-800/50 px-3 py-1 text-xs font-medium text-zinc-300 backdrop-blur-sm"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
+                  {/* Project description snippet */}
+                  <div className="absolute top-12 left-3 right-3 text-xs text-zinc-300 font-medium line-clamp-4 leading-relaxed drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)] z-10">
+                    {project.description}
+                  </div>
 
-                {/* Bottom glow line */}
-                <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
-              </div>
-            </div>
-          ))}
+                  {/* Author / Tech Stack row */}
+                  <StoryAuthor className="z-10">
+                    <StoryAuthorImage
+                      fallback={project.tags[0]?.substring(0, 2).toUpperCase()}
+                      name={project.tags[0]}
+                      className="border-white/40 shadow-sm"
+                    />
+                    <StoryAuthorName className="text-zinc-200 text-xs font-semibold drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)] truncate">
+                      {project.tags.join(' • ')}
+                    </StoryAuthorName>
+                  </StoryAuthor>
+                </Story>
+              ))}
+            </StoriesContent>
+          </Stories>
         </div>
       </div>
     </section>
