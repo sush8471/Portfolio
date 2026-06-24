@@ -157,6 +157,7 @@ const CertificationsSection = () => {
         {/* Grid / Horizontal Carousel for Mobile */}
         <div
           ref={gridRef}
+          data-lenis-prevent
           className="flex overflow-x-auto md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 snap-x snap-mandatory scrollbar-none py-4 -mx-6 px-6 md:mx-0 md:px-0"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >

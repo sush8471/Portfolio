@@ -166,6 +166,7 @@ const ProjectsSection = () => {
 
         {/* Projects Grid / Horizontal Carousel for Mobile */}
         <div
+          data-lenis-prevent
           className="flex overflow-x-auto md:grid md:grid-cols-2 gap-8 snap-x snap-mandatory scrollbar-none py-4 -mx-6 px-6 md:mx-0 md:px-0"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
