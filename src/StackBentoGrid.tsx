@@ -1,9 +1,12 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { gsap } from 'gsap';
-import { X, ChevronLeft, ChevronRight, TrendingUp, Sparkles } from 'lucide-react';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { Sparkles } from 'lucide-react';
 import { usePrefersReducedMotion } from './usePrefersReducedMotion';
 
-type ToolSize = 'small' | 'wide' | 'tall' | 'large';
+// Register ScrollTrigger
+gsap.registerPlugin(ScrollTrigger);
+
 type ToolGroup = 'languages' | 'backend' | 'tools';
 
 interface Tool {
@@ -282,247 +285,148 @@ const getProficiencyLabel = (score: number): string => {
 const StackBentoGrid = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
-  const carouselRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
-  const modalRef = useRef<HTMLDivElement>(null);
-  const modalContentRef = useRef<HTMLDivElement>(null);
-  const glowRef = useRef<HTMLDivElement>(null);
+  const scrollTriggersRef = useRef<globalThis.ScrollTrigger[]>([]);
   const reducedMotion = usePrefersReducedMotion();
 
-  const [activeTool, setActiveTool] = useState<Tool | null>(null);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [barWidth, setBarWidth] = useState(0);
   const [selectedGroup, setSelectedGroup] = useState<'all' | ToolGroup>('all');
-
-  // Stagger entry animations for headers and cards
-  useEffect(() => {
-    if (reducedMotion) {
-      gsap.set(
-        [
-          ...(headerRef.current?.children || []),
-          ...cardsRef.current.filter(Boolean),
-        ],
-        { opacity: 1, y: 0, scale: 1 }
-      );
-      return;
-    }
-
-    const ctx = gsap.context(() => {
-      // Header entrance
-      gsap.fromTo(
-        headerRef.current?.children || [],
-        { opacity: 0, y: 50 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          stagger: 0.12,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: headerRef.current,
-            start: 'top 85%',
-            toggleActions: 'play none none reverse',
-          },
-        }
-      );
-
-      // Carousel cards stagger
-      gsap.fromTo(
-        cardsRef.current.filter(Boolean),
-        { opacity: 0, x: 50, scale: 0.98 },
-        {
-          opacity: 1,
-          x: 0,
-          scale: 1,
-          duration: 0.8,
-          stagger: 0.08,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: carouselRef.current,
-            start: 'top 85%',
-            toggleActions: 'play none none reverse',
-          },
-        }
-      );
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, [reducedMotion]);
-
-  // Re-run card animations when filter selection changes
-  useEffect(() => {
-    if (reducedMotion) return;
-    const cards = cardsRef.current.filter(Boolean);
-    if (cards.length > 0) {
-      gsap.fromTo(
-        cards,
-        { opacity: 0, scale: 0.96, y: 15 },
-        { opacity: 1, scale: 1, y: 0, duration: 0.5, stagger: 0.05, ease: 'power2.out' }
-      );
-    }
-  }, [selectedGroup, reducedMotion]);
-
-  // Modal GSAP Animation
-  useEffect(() => {
-    if (modalOpen && activeTool) {
-      if (reducedMotion) {
-        setBarWidth(activeTool.proficiency);
-        return;
-      }
-      // Calculate dynamic scatter metrics based on proficiency percentage
-      const targetScale = 0.75 + (activeTool.proficiency / 100) * 0.65; 
-      const targetOpacity = 0.12 + (activeTool.proficiency / 100) * 0.12; 
-      const targetBlur = 75 + (activeTool.proficiency / 100) * 45; 
-
-      // Open transition
-      gsap.fromTo(
-        modalRef.current,
-        { opacity: 0 },
-        { opacity: 1, duration: 0.3, ease: 'power2.out' }
-      );
-      gsap.fromTo(
-        modalContentRef.current,
-        { scale: 0.9, y: 20 },
-        { scale: 1, y: 0, duration: 0.4, ease: 'back.out(1.7)' }
-      );
-      // Cinematic brand light scattering animation proportional to progress
-      gsap.fromTo(
-        glowRef.current,
-        { scale: 0.05, opacity: 0, filter: 'blur(30px)' },
-        { 
-          scale: targetScale, 
-          opacity: targetOpacity, 
-          filter: `blur(${targetBlur}px)`,
-          duration: 2.2, 
-          ease: 'power3.out' 
-        }
-      );
-      
-      // Delay progress bar to run after modal enters
-      const timer = setTimeout(() => {
-        setBarWidth(activeTool.proficiency);
-      }, 200);
-
-      return () => clearTimeout(timer);
-    } else {
-      setBarWidth(0);
-    }
-  }, [modalOpen, activeTool, reducedMotion]);
-
-  const handleCardClick = (tool: Tool) => {
-    setActiveTool(tool);
-    setModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    if (reducedMotion) {
-      setModalOpen(false);
-      setActiveTool(null);
-      return;
-    }
-    gsap.to(modalContentRef.current, {
-      scale: 0.9,
-      y: 20,
-      duration: 0.25,
-      ease: 'power2.in',
-    });
-    gsap.to(glowRef.current, {
-      scale: 0.05,
-      opacity: 0,
-      filter: 'blur(30px)',
-      duration: 0.25,
-      ease: 'power2.in',
-    });
-    gsap.to(modalRef.current, {
-      opacity: 0,
-      duration: 0.25,
-      ease: 'power2.in',
-      onComplete: () => {
-        setModalOpen(false);
-        setActiveTool(null);
-      },
-    });
-  };
-
-  const scrollCarousel = (direction: 'left' | 'right') => {
-    if (!carouselRef.current) return;
-    const scrollAmount = carouselRef.current.clientWidth * 0.75;
-    carouselRef.current.scrollBy({
-      left: direction === 'left' ? -scrollAmount : scrollAmount,
-      behavior: 'smooth',
-    });
-  };
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (reducedMotion) return;
-    const el = e.currentTarget;
-    const rect = el.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const cx = rect.width / 2;
-    const cy = rect.height / 2;
-    const dx = (x - cx) / cx;
-    const dy = (y - cy) / cy;
-
-    el.style.transform = `perspective(1000px) rotateY(${dx * 5}deg) rotateX(${-dy * 5}deg) scale3d(1.01, 1.01, 1.01)`;
-    el.style.setProperty('--mouse-x', `${x}px`);
-    el.style.setProperty('--mouse-y', `${y}px`);
-  };
-
-  const handleMouseLeave = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (reducedMotion) return;
-    const el = e.currentTarget;
-    el.style.transform = 'perspective(1000px) rotateY(0deg) rotateX(0deg) scale3d(1, 1, 1)';
-  };
 
   // Filter tools based on active group state
   const filteredTools = tools.filter(
     (t) => selectedGroup === 'all' || t.group === selectedGroup
   );
 
+  // Setup / reset scroll animations whenever the filtered tools list changes
+  useEffect(() => {
+    // Clear out existing ScrollTriggers first
+    scrollTriggersRef.current.forEach((st) => st.kill());
+    scrollTriggersRef.current = [];
+
+    // Header entrance animation
+    if (!reducedMotion && headerRef.current) {
+      const headerSt = ScrollTrigger.create({
+        trigger: headerRef.current,
+        start: 'top 85%',
+        animation: gsap.fromTo(
+          headerRef.current.children,
+          { opacity: 0, y: 30 },
+          { opacity: 1, y: 0, duration: 0.6, stagger: 0.1, ease: 'power2.out' }
+        ),
+        toggleActions: 'play none none reverse',
+      });
+      scrollTriggersRef.current.push(headerSt);
+    } else if (headerRef.current) {
+      gsap.set(headerRef.current.children, { opacity: 1, y: 0 });
+    }
+
+    // Set up a ScrollTrigger timeline for each visible tool card
+    const cards = cardsRef.current.filter(Boolean);
+    cards.forEach((card, index) => {
+      const tool = filteredTools[index];
+      if (!tool || !card) return;
+
+      const progressBar = card.querySelector('.progress-bar') as HTMLDivElement;
+      const glow = card.querySelector('.ambient-glow') as HTMLDivElement;
+      
+      if (reducedMotion) {
+        gsap.set(card, { opacity: 1, y: 0 });
+        if (progressBar) gsap.set(progressBar, { width: `${tool.proficiency}%` });
+        if (glow) {
+          const targetScale = 0.75 + (tool.proficiency / 100) * 0.65;
+          const targetOpacity = 0.12 + (tool.proficiency / 100) * 0.12;
+          const targetBlur = 75 + (tool.proficiency / 100) * 45;
+          gsap.set(glow, {
+            scale: targetScale,
+            opacity: targetOpacity,
+            filter: `blur(${targetBlur}px)`,
+          });
+        }
+        return;
+      }
+
+      // Calculate dynamic scatter values matching previous premium popups
+      const targetScale = 0.75 + (tool.proficiency / 100) * 0.65;
+      const targetOpacity = 0.12 + (tool.proficiency / 100) * 0.12;
+      const targetBlur = 75 + (tool.proficiency / 100) * 45;
+
+      const tl = gsap.timeline();
+      
+      // Card fades and slides up
+      tl.fromTo(
+        card,
+        { opacity: 0, y: 50 },
+        { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }
+      );
+
+      // Progress bar fills up
+      if (progressBar) {
+        tl.fromTo(
+          progressBar,
+          { width: '0%' },
+          {
+            width: `${tool.proficiency}%`,
+            duration: 1.2,
+            ease: 'power3.out',
+          },
+          '-=0.4'
+        );
+      }
+
+      // Glowing spotlight expands inside the card
+      if (glow) {
+        tl.fromTo(
+          glow,
+          { scale: 0.05, opacity: 0, filter: 'blur(30px)' },
+          {
+            scale: targetScale,
+            opacity: targetOpacity,
+            filter: `blur(${targetBlur}px)`,
+            duration: 2.0,
+            ease: 'power2.out',
+          },
+          '-=1.2'
+        );
+      }
+
+      const st = ScrollTrigger.create({
+        trigger: card,
+        start: 'top 85%',
+        animation: tl,
+        toggleActions: 'play none none reverse',
+      });
+
+      scrollTriggersRef.current.push(st);
+    });
+
+    return () => {
+      scrollTriggersRef.current.forEach((st) => st.kill());
+      scrollTriggersRef.current = [];
+    };
+  }, [filteredTools, reducedMotion]);
+
   return (
     <section
       ref={sectionRef}
       className="relative z-10 bg-black px-6 py-32 md:px-12 lg:px-24 overflow-hidden"
     >
-      <div className="mx-auto max-w-7xl relative">
-        {/* Header & Navigation controls */}
-        <div ref={headerRef} className="flex flex-col md:flex-row md:items-end md:justify-between mb-10 gap-6">
-          <div>
-            <p className="mb-4 text-sm font-medium uppercase tracking-[0.2em] text-zinc-500">
-              The Toolkit
-            </p>
-            <h2
-              className="text-4xl font-bold leading-tight tracking-tight text-white md:text-5xl lg:text-6xl"
-              style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
-            >
-              Stack that powers
-              <br />
-              <span className="text-zinc-400">the craft</span>
-            </h2>
-          </div>
-
-          {/* Desktop Navigation Buttons */}
-          <div className="hidden md:flex gap-3">
-            <button
-              onClick={() => scrollCarousel('left')}
-              className="group flex h-12 w-12 items-center justify-center rounded-full border border-zinc-800 bg-zinc-900/30 text-zinc-400 backdrop-blur-md transition-all duration-300 hover:border-zinc-600 hover:bg-zinc-800 hover:text-white"
-              aria-label="Previous slide"
-            >
-              <ChevronLeft size={20} className="transition-transform duration-300 group-hover:-translate-x-0.5" />
-            </button>
-            <button
-              onClick={() => scrollCarousel('right')}
-              className="group flex h-12 w-12 items-center justify-center rounded-full border border-zinc-800 bg-zinc-900/30 text-zinc-400 backdrop-blur-md transition-all duration-300 hover:border-zinc-600 hover:bg-zinc-800 hover:text-white"
-              aria-label="Next slide"
-            >
-              <ChevronRight size={20} className="transition-transform duration-300 group-hover:translate-x-0.5" />
-            </button>
-          </div>
+      <div className="mx-auto max-w-4xl relative">
+        {/* Header */}
+        <div ref={headerRef} className="mb-10">
+          <p className="mb-4 text-sm font-medium uppercase tracking-[0.2em] text-zinc-500">
+            The Toolkit
+          </p>
+          <h2
+            className="text-4xl font-bold leading-tight tracking-tight text-white md:text-5xl lg:text-6xl"
+            style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
+          >
+            Stack that powers
+            <br />
+            <span className="text-zinc-400">the craft</span>
+          </h2>
         </div>
 
-        {/* Categories Tab Filtering Navigation Row */}
-        <div className="flex flex-wrap gap-2 mb-10 border-b border-zinc-900 pb-6">
+        {/* Categories Tab Filtering Row */}
+        <div className="flex flex-wrap gap-2 mb-16 border-b border-zinc-900 pb-6">
           {(
             [
               { id: 'all', label: 'All Stack' },
@@ -545,12 +449,8 @@ const StackBentoGrid = () => {
           ))}
         </div>
 
-        {/* Slidable Carousel track */}
-        <div
-          ref={carouselRef}
-          className="flex gap-4 overflow-x-auto scrollbar-none snap-x snap-mandatory py-4 px-2 -mx-2 select-none"
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-        >
+        {/* Vertical Stack List of Progress Cards */}
+        <div className="flex flex-col gap-6 w-full">
           {filteredTools.map((tool, index) => {
             const LogoComponent = tool.icon;
 
@@ -560,156 +460,82 @@ const StackBentoGrid = () => {
                 ref={(el) => {
                   cardsRef.current[index] = el;
                 }}
-                onClick={() => handleCardClick(tool)}
-                onMouseMove={handleMouseMove}
-                onMouseLeave={handleMouseLeave}
-                className="snap-start shrink-0 w-[280px] sm:w-[320px] h-[340px] group relative overflow-hidden rounded-2xl border border-zinc-800/60 bg-zinc-900/10 p-6 backdrop-blur-md transition-[border-color,box-shadow] duration-300 cursor-pointer hover:border-zinc-700 hover:shadow-[0_0_40px_rgba(var(--glow),0.05)]"
+                className="relative w-full overflow-hidden rounded-3xl border border-zinc-800/80 bg-zinc-950/20 p-6 md:p-8 transition-all duration-500 hover:border-zinc-700/80 hover:bg-zinc-950/40"
                 style={{
-                  transformStyle: 'preserve-3d',
-                  willChange: 'transform',
-                  scrollSnapAlign: 'start',
-                  ['--glow' as any]: tool.glowColor,
+                  boxShadow: `inset 0 1px 1px rgba(255,255,255,0.03)`,
                 }}
               >
-                {/* Brand-Specific Spotlight Gradient on Hover */}
+                {/* Ambient Background Spotlight matching Brand Color */}
                 <div
-                  className="pointer-events-none absolute -inset-px rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                  className="ambient-glow absolute -top-32 -left-32 w-80 h-80 rounded-full blur-[100px] pointer-events-none"
                   style={{
-                    background: `radial-gradient(220px circle at var(--mouse-x, 0) var(--mouse-y, 0), rgba(${tool.glowColor}, 0.15), transparent 80%)`,
+                    backgroundColor: `rgb(${tool.glowColor})`,
+                    transformOrigin: 'center center',
                   }}
                 />
 
-                <div className="relative flex h-full flex-col justify-between">
-                  <div>
-                    {/* Top row: Icon and Category badge */}
-                    <div className="flex items-start justify-between mb-8">
-                      <div className="flex items-center justify-center rounded-2xl bg-zinc-900/80 border border-zinc-800/60 p-3.5 text-zinc-300 shadow-[inset_0_1px_2px_rgba(255,255,255,0.05)] w-14 h-14">
-                        <LogoComponent className="h-full w-full" />
-                      </div>
-                      <span className="rounded-full border border-zinc-800/50 bg-zinc-900/60 px-3.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-400 backdrop-blur-sm shadow-sm">
+                {/* Header row: Icon, Name & Category on Left, Level Badge on Right */}
+                <div className="relative flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 mb-6 z-10">
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center justify-center rounded-2xl bg-zinc-900 border border-zinc-800 p-3 text-zinc-300 w-14 h-14 shadow-[inset_0_1px_2px_rgba(255,255,255,0.05)]">
+                      <LogoComponent className="h-full w-full" />
+                    </div>
+                    <div>
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-500">
                         {tool.category}
                       </span>
+                      <h4 className="text-xl md:text-2xl font-bold text-white tracking-wide leading-tight">
+                        {tool.name}
+                      </h4>
                     </div>
-
-                    {/* Mid row: Name and Description */}
-                    <h3 className="font-bold text-white text-xl md:text-2xl tracking-wide mb-3">
-                      {tool.name}
-                    </h3>
-                    <p className="text-zinc-400 text-sm leading-relaxed line-clamp-3">
-                      {tool.description}
-                    </p>
                   </div>
 
-                  {/* Bottom: Action bar showing stats prompt */}
-                  <div className="flex items-center justify-between pt-4 border-t border-zinc-800/40">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 group-hover:text-white transition-colors duration-300">
-                      Explore Proficiency
+                  <span
+                    className="self-start sm:self-center text-xs font-extrabold uppercase tracking-wide px-3.5 py-1.5 rounded-full border bg-zinc-900/60 border-zinc-800/80 shadow-sm"
+                    style={{
+                      color: `rgb(${tool.glowColor})`,
+                      borderColor: `rgba(${tool.glowColor}, 0.2)`,
+                    }}
+                  >
+                    {getProficiencyLabel(tool.proficiency)}
+                  </span>
+                </div>
+
+                {/* Description */}
+                <p className="relative z-10 text-zinc-400 text-sm md:text-base leading-relaxed mb-6 max-w-3xl">
+                  {tool.description}
+                </p>
+
+                {/* Progress bar container */}
+                <div className="relative z-10">
+                  <div className="flex justify-between items-end mb-2.5">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 flex items-center gap-1.5">
+                      <Sparkles size={11} style={{ color: `rgb(${tool.glowColor})` }} />
+                      Comfort Rating
                     </span>
-                    {/* Pulse element */}
-                    <span className="relative flex h-2 w-2">
-                      <span
-                        className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"
-                        style={{ backgroundColor: `rgb(${tool.glowColor})` }}
-                      ></span>
-                      <span
-                        className="relative inline-flex rounded-full h-2 w-2"
-                        style={{ backgroundColor: `rgb(${tool.glowColor})` }}
-                      ></span>
-                    </span>
+                  </div>
+
+                  {/* Progress track */}
+                  <div className="h-3 w-full bg-zinc-900 rounded-full overflow-hidden border border-zinc-800/30 p-0.5">
+                    <div
+                      className="progress-bar h-full rounded-full"
+                      style={{
+                        background: `linear-gradient(to right, rgb(${tool.glowColor}), rgba(${tool.glowColor}, 0.5))`,
+                        boxShadow: `0 0 10px rgba(${tool.glowColor}, 0.5)`,
+                      }}
+                    />
                   </div>
                 </div>
 
-                {/* Bottom subtle edge light matching brand color */}
+                {/* Bottom subtle edge light matching brand color on hover */}
                 <div
-                  className="absolute inset-x-0 bottom-0 h-px opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                  style={{
-                    background: `linear-gradient(to right, transparent, rgba(${tool.glowColor}, 0.3), transparent)`,
-                  }}
+                  className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/5 to-transparent"
                 />
               </div>
             );
           })}
         </div>
       </div>
-
-      {/* PREMIUM DETAILS POPUP MODAL */}
-      {modalOpen && activeTool && (
-        <div
-          ref={modalRef}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-md"
-          onClick={handleCloseModal}
-        >
-          <div
-            ref={modalContentRef}
-            className="relative w-full max-w-lg overflow-hidden rounded-3xl border border-zinc-800/80 bg-zinc-950 p-6 md:p-8 shadow-[0_0_80px_rgba(0,0,0,0.8)]"
-            onClick={(e) => e.stopPropagation()}
-            style={{
-              boxShadow: `0 0 50px -10px rgba(${activeTool.glowColor}, 0.15), inset 0 1px 1px rgba(255,255,255,0.05)`,
-            }}
-          >
-            {/* Ambient Background Spotlight matching Brand Color */}
-            <div
-              ref={glowRef}
-              className="absolute -top-32 -left-32 w-80 h-80 rounded-full blur-[100px] pointer-events-none"
-              style={{ backgroundColor: `rgb(${activeTool.glowColor})`, transformOrigin: 'center center' }}
-            />
-
-            {/* Header section with brand logo & close button */}
-            <div className="flex items-start justify-between relative mb-8">
-              <div className="flex items-center gap-4">
-                <div className="flex items-center justify-center rounded-2xl bg-zinc-900 border border-zinc-800 p-3.5 text-zinc-300 w-16 h-16 shadow-[inset_0_1px_2px_rgba(255,255,255,0.05)]">
-                  {React.createElement(activeTool.icon, { className: 'h-full w-full' })}
-                </div>
-                <div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-500">
-                    {activeTool.category}
-                  </span>
-                  <h4 className="text-2xl font-bold text-white tracking-wide">
-                    {activeTool.name}
-                  </h4>
-                </div>
-              </div>
-
-              <button
-                onClick={handleCloseModal}
-                className="rounded-full border border-zinc-800/80 bg-zinc-900/60 p-2 text-zinc-400 transition-all duration-300 hover:border-zinc-700 hover:text-white"
-                aria-label="Close details"
-              >
-                <X size={18} />
-              </button>
-            </div>
-
-            {/* Body content with qualitative progress rating (Recruiter-Friendly) */}
-            <div className="relative">
-              <div className="flex justify-between items-end mb-3">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 flex items-center gap-1.5">
-                  <Sparkles size={12} style={{ color: `rgb(${activeTool.glowColor})` }} />
-                  Comfort Rating
-                </span>
-                {/* Qualititative Level instead of raw numerical percentage */}
-                <span
-                  className="text-sm font-extrabold uppercase tracking-wide px-3 py-1 rounded-full border bg-zinc-900/60 border-zinc-800/80"
-                  style={{ color: `rgb(${activeTool.glowColor})`, borderColor: `rgba(${activeTool.glowColor}, 0.2)` }}
-                >
-                  {getProficiencyLabel(activeTool.proficiency)}
-                </span>
-              </div>
-
-              {/* Progress track */}
-              <div className="h-3 w-full bg-zinc-900 rounded-full overflow-hidden border border-zinc-800/30 p-0.5">
-                <div
-                  className="h-full rounded-full transition-all duration-1000 ease-out"
-                  style={{
-                    width: `${barWidth}%`,
-                    background: `linear-gradient(to right, rgb(${activeTool.glowColor}), rgba(${activeTool.glowColor}, 0.5))`,
-                    boxShadow: `0 0 10px rgba(${activeTool.glowColor}, 0.5)`,
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </section>
   );
 };
