@@ -193,7 +193,7 @@ const ProjectsSection = () => {
 
                 {/* Floating action buttons */}
                 <div className="absolute right-4 top-4 flex gap-2 opacity-100 md:opacity-0 transition-all duration-500 md:group-hover:opacity-100 z-25">
-                  {project.githubUrl && project.githubUrl !== '#' && (
+                  {project.githubUrl && (
                     <a
                       href={project.githubUrl}
                       target="_blank"
