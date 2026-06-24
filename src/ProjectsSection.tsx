@@ -181,7 +181,7 @@ const ProjectsSection = () => {
                   ref={(el) => {
                     cardsRef.current[index] = el;
                   }}
-                  className="aspect-[9/16] !w-[240px] sm:!w-[280px]"
+                  className="aspect-[4/3] !w-[290px] sm:!w-[360px]"
                   onClick={() => {
                     if (project.liveUrl && project.liveUrl !== '#') {
                       window.open(project.liveUrl, '_blank', 'noopener,noreferrer');
@@ -197,16 +197,16 @@ const ProjectsSection = () => {
                     </div>
                   )}
 
-                  <StoryOverlay side="top" className="h-24 from-black/70 to-transparent z-10" />
-                  <StoryOverlay side="bottom" className="h-36 from-black/90 to-transparent z-10" />
+                  <StoryOverlay side="top" className="h-20 from-black/70 to-transparent z-10" />
+                  <StoryOverlay side="bottom" className="h-28 from-black/90 to-transparent z-10" />
                   
                   {/* Title overlay */}
-                  <StoryTitle className="font-extrabold text-lg text-white pr-8 leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] z-10">
+                  <StoryTitle className="font-extrabold text-base sm:text-lg text-white pr-8 leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] z-10">
                     {project.title}
                   </StoryTitle>
 
                   {/* Project description snippet */}
-                  <div className="absolute top-12 left-3 right-3 text-xs text-zinc-300 font-medium line-clamp-4 leading-relaxed drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)] z-10">
+                  <div className="absolute top-12 left-3 right-3 text-[11px] sm:text-xs text-zinc-300 font-medium line-clamp-3 leading-relaxed drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)] z-10">
                     {project.description}
                   </div>
 
