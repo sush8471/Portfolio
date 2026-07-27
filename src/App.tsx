@@ -28,30 +28,36 @@ function App() {
     let rafCallback: ((time: number) => void) | null = null;
 
     if (!reducedMotion) {
-      lenis = new Lenis({
-        duration: 1.1,
-        easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        orientation: 'vertical',
-        gestureOrientation: 'vertical',
-        smoothWheel: true,
-        wheelMultiplier: 0.8,
-        touchMultiplier: 1,
-        syncTouch: true,
-      });
+      const isMobile = window.innerWidth < 768;
 
-      lenisRef.current = lenis;
+      if (!isMobile) {
+        lenis = new Lenis({
+          duration: 1.1,
+          easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          orientation: 'vertical',
+          gestureOrientation: 'vertical',
+          smoothWheel: true,
+          wheelMultiplier: 0.8,
+          touchMultiplier: 1,
+          syncTouch: true,
+        });
+      }
 
-      // Bridge Lenis → ScrollTrigger
-      lenis.on('scroll', ScrollTrigger.update);
+      if (lenis) {
+        lenisRef.current = lenis;
 
-      // Bridge GSAP ticker → Lenis
-      rafCallback = (time: number) => {
-        lenis?.raf(time * 1000);
-      };
-      gsap.ticker.add(rafCallback);
+        // Bridge Lenis → ScrollTrigger
+        lenis.on('scroll', ScrollTrigger.update);
 
-      // Critical: disable lag smoothing so ScrollTrigger stays locked
-      gsap.ticker.lagSmoothing(0);
+        // Bridge GSAP ticker → Lenis
+        rafCallback = (time: number) => {
+          lenis?.raf(time * 1000);
+        };
+        gsap.ticker.add(rafCallback);
+
+        // Critical: disable lag smoothing so ScrollTrigger stays locked
+        gsap.ticker.lagSmoothing(0);
+      }
     }
 
     // Refresh after layout settles

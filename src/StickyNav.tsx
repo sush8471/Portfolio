@@ -11,6 +11,7 @@ const navItems = [
 
 const StickyNav = () => {
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const { openResume } = useResumeViewer();
 
   useEffect(() => {
@@ -18,6 +19,13 @@ const StickyNav = () => {
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [menuOpen]);
+
+  const closeMenu = () => setMenuOpen(false);
 
   return (
     <nav
@@ -34,6 +42,8 @@ const StickyNav = () => {
         >
           SC<span className="text-zinc-500">.</span>
         </a>
+
+        {/* Desktop nav */}
         <div className="hidden items-center gap-6 md:flex">
           {navItems.map((item) => (
             <a
@@ -51,6 +61,41 @@ const StickyNav = () => {
             Resume
           </button>
         </div>
+
+        {/* Mobile hamburger */}
+        <button
+          onClick={() => setMenuOpen(!menuOpen)}
+          className="flex flex-col gap-1.5 md:hidden"
+          aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+        >
+          <span className={`block h-0.5 w-5 bg-zinc-400 transition-all duration-300 ${menuOpen ? 'translate-y-2 rotate-45' : ''}`} />
+          <span className={`block h-0.5 w-5 bg-zinc-400 transition-all duration-300 ${menuOpen ? 'opacity-0' : ''}`} />
+          <span className={`block h-0.5 w-5 bg-zinc-400 transition-all duration-300 ${menuOpen ? '-translate-y-2 -rotate-45' : ''}`} />
+        </button>
+      </div>
+
+      {/* Mobile overlay menu */}
+      <div
+        className={`fixed inset-0 z-40 flex flex-col items-center justify-center gap-8 bg-black/95 backdrop-blur-xl transition-all duration-500 md:hidden ${
+          menuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
+      >
+        {navItems.map((item) => (
+          <a
+            key={item.href}
+            href={item.href}
+            onClick={closeMenu}
+            className="text-2xl font-bold text-white transition-colors hover:text-zinc-400"
+          >
+            {item.label}
+          </a>
+        ))}
+        <button
+          onClick={() => { closeMenu(); openResume(); }}
+          className="mt-4 rounded-full border border-zinc-600 bg-zinc-900 px-8 py-3 text-sm font-semibold text-white transition-all duration-300 hover:border-white hover:bg-white hover:text-black"
+        >
+          View Resume
+        </button>
       </div>
     </nav>
   );
