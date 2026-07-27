@@ -1,7 +1,7 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ExternalLink } from 'lucide-react';
+import { ChevronDown, ExternalLink } from 'lucide-react';
 
 import { usePrefersReducedMotion } from './usePrefersReducedMotion';
 
@@ -87,6 +87,11 @@ const ProjectsSection = () => {
   const gridRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
   const reducedMotion = usePrefersReducedMotion();
+  const [expandedCards, setExpandedCards] = useState<Record<string, boolean>>({});
+
+  const toggleCard = (title: string) => {
+    setExpandedCards((prev) => ({ ...prev, [title]: !prev[title] }));
+  };
 
   useEffect(() => {
     if (reducedMotion) {
@@ -242,37 +247,60 @@ const ProjectsSection = () => {
 
               {/* Content */}
               <div className="relative p-6 md:p-8">
-                <h3 className="mb-3 text-xl font-bold text-white transition-colors group-hover:text-zinc-200 md:text-2xl">
-                  {project.title}
-                </h3>
-                <p className="mb-6 text-sm leading-relaxed text-zinc-400 md:text-base">
-                  {project.description}
-                </p>
+                <div className="flex items-start justify-between gap-4">
+                  <h3 className="text-xl font-bold text-white transition-colors group-hover:text-zinc-200 md:text-2xl">
+                    {project.title}
+                  </h3>
+                  <button
+                    onClick={() => toggleCard(project.title)}
+                    aria-expanded={!!expandedCards[project.title]}
+                    aria-label={expandedCards[project.title] ? 'Hide project details' : 'Show project details'}
+                    className="flex shrink-0 items-center gap-1 rounded-full border border-zinc-700/50 bg-zinc-800/50 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-zinc-300 transition-all duration-300 hover:border-white hover:bg-white hover:text-black"
+                  >
+                    {expandedCards[project.title] ? 'Less' : 'Details'}
+                    <ChevronDown
+                      size={14}
+                      className={`transition-transform duration-300 ${expandedCards[project.title] ? 'rotate-180' : ''}`}
+                    />
+                  </button>
+                </div>
 
-                {/* Mini case study highlights */}
-                {project.highlights && (
-                  <div className="mb-4 flex flex-wrap gap-1.5">
-                    {project.highlights.map((h) => (
-                      <span
-                        key={h}
-                        className="rounded-md bg-zinc-800/60 px-2 py-0.5 text-[10px] font-medium text-zinc-400"
-                      >
-                        {h}
-                      </span>
-                    ))}
+                <div
+                  className={`grid transition-all duration-500 ease-in-out ${
+                    expandedCards[project.title] ? 'grid-rows-[1fr] opacity-100 mt-4' : 'grid-rows-[0fr] opacity-0 mt-0'
+                  }`}
+                >
+                  <div className="overflow-hidden">
+                    <p className="mb-6 text-sm leading-relaxed text-zinc-400 md:text-base">
+                      {project.description}
+                    </p>
+
+                    {/* Mini case study highlights */}
+                    {project.highlights && (
+                      <div className="mb-4 flex flex-wrap gap-1.5">
+                        {project.highlights.map((h) => (
+                          <span
+                            key={h}
+                            className="rounded-md bg-zinc-800/60 px-2 py-0.5 text-[10px] font-medium text-zinc-400"
+                          >
+                            {h}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Tags */}
+                    <div className="flex flex-wrap gap-2">
+                      {project.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="rounded-full border border-zinc-700/50 bg-zinc-800/50 px-3 py-1 text-xs font-medium text-zinc-300 backdrop-blur-sm"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                )}
-
-                {/* Tags */}
-                <div className="flex flex-wrap gap-2">
-                  {project.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="rounded-full border border-zinc-700/50 bg-zinc-800/50 px-3 py-1 text-xs font-medium text-zinc-300 backdrop-blur-sm"
-                    >
-                      {tag}
-                    </span>
-                  ))}
                 </div>
 
                 {/* Bottom glow line */}
