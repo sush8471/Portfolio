@@ -1,9 +1,9 @@
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Mail, ArrowUpRight, Send } from 'lucide-react';
-import MagneticButton from './MagneticButton';
+import { Mail, ArrowUpRight } from 'lucide-react';
 import { usePrefersReducedMotion } from './usePrefersReducedMotion';
+import { useResumeViewer } from './ResumeViewerContext';
 import WebVitalsBadge from './WebVitalsBadge';
 
 const GithubIcon = ({ size = 20 }: { size?: number }) => (
@@ -34,11 +34,8 @@ const socialLinks = [
 const ContactSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
-  const formRef = useRef<HTMLFormElement>(null);
-  const [formState, setFormState] = useState({ name: '', email: '', message: '' });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
   const reducedMotion = usePrefersReducedMotion();
+  const { openResume } = useResumeViewer();
 
   useEffect(() => {
     if (reducedMotion) {
@@ -70,18 +67,6 @@ const ContactSection = () => {
 
     return () => ctx.revert();
   }, [reducedMotion]);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    // Simulate submission
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setSubmitted(true);
-      setFormState({ name: '', email: '', message: '' });
-      setTimeout(() => setSubmitted(false), 4000);
-    }, 1500);
-  };
 
   return (
     <section
@@ -134,94 +119,28 @@ const ContactSection = () => {
             </div>
           </div>
 
-          {/* Right Column - Form */}
-          <div className="relative">
-            <div className="rounded-2xl border border-zinc-800/50 bg-zinc-900/30 p-8 backdrop-blur-xl md:p-10">
-              {submitted ? (
-                <div className="flex flex-col items-center justify-center py-12 text-center">
-                  <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-zinc-800">
-                    <Send size={28} className="text-white" />
-                  </div>
-                  <h3 className="mb-2 text-xl font-bold text-white">Message Sent!</h3>
-                  <p className="text-zinc-400">I'll get back to you shortly.</p>
+          {/* Right Column - Direct Email CTA */}
+          <div className="relative flex flex-col justify-center">
+            <div className="rounded-2xl border border-zinc-800/50 bg-zinc-900/30 p-8 backdrop-blur-xl md:p-10 text-center">
+              <div className="mb-6 flex justify-center">
+                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-zinc-800">
+                  <Mail size={28} className="text-white" />
                 </div>
-              ) : (
-                <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
-                  <div>
-                    <label
-                      htmlFor="name"
-                      className="mb-2 block text-sm font-medium text-zinc-400"
-                    >
-                      Name
-                    </label>
-                    <input
-                      type="text"
-                      id="name"
-                      required
-                      value={formState.name}
-                      onChange={(e) =>
-                        setFormState((s) => ({ ...s, name: e.target.value }))
-                      }
-                      className="w-full rounded-xl border border-zinc-800 bg-black/50 px-4 py-3 text-white placeholder-zinc-600 outline-none transition-all duration-300 focus:border-zinc-600 focus:ring-1 focus:ring-zinc-600"
-                      placeholder="John Doe"
-                    />
-                  </div>
-
-                  <div>
-                    <label
-                      htmlFor="email"
-                      className="mb-2 block text-sm font-medium text-zinc-400"
-                    >
-                      Email
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      required
-                      value={formState.email}
-                      onChange={(e) =>
-                        setFormState((s) => ({ ...s, email: e.target.value }))
-                      }
-                      className="w-full rounded-xl border border-zinc-800 bg-black/50 px-4 py-3 text-white placeholder-zinc-600 outline-none transition-all duration-300 focus:border-zinc-600 focus:ring-1 focus:ring-zinc-600"
-                      placeholder="john@example.com"
-                    />
-                  </div>
-
-                  <div>
-                    <label
-                      htmlFor="message"
-                      className="mb-2 block text-sm font-medium text-zinc-400"
-                    >
-                      Message
-                    </label>
-                    <textarea
-                      id="message"
-                      required
-                      rows={5}
-                      value={formState.message}
-                      onChange={(e) =>
-                        setFormState((s) => ({ ...s, message: e.target.value }))
-                      }
-                      className="w-full resize-none rounded-xl border border-zinc-800 bg-black/50 px-4 py-3 text-white placeholder-zinc-600 outline-none transition-all duration-300 focus:border-zinc-600 focus:ring-1 focus:ring-zinc-600"
-                      placeholder="Tell me about your project..."
-                    />
-                  </div>
-
-                  <MagneticButton
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="group relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-xl bg-white px-8 py-4 text-sm font-bold text-black transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,255,255,0.25)] disabled:opacity-70"
-                  >
-                    <span className="relative z-10">
-                      {isSubmitting ? 'Sending...' : 'Send Message'}
-                    </span>
-                    <ArrowUpRight
-                      size={18}
-                      className="relative z-10 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"
-                    />
-                  </MagneticButton>
-                </form>
-              )}
+              </div>
+              <h3 className="mb-3 text-xl font-bold text-white">Prefer email?</h3>
+              <p className="mb-8 text-zinc-400">
+                Reach out directly — I typically respond within 24 hours.
+              </p>
+              <a
+                href="mailto:sushantcha00123@gmail.com"
+                className="group inline-flex items-center gap-2 rounded-xl bg-white px-8 py-4 text-sm font-bold text-black transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,255,255,0.25)]"
+              >
+                sushantcha00123@gmail.com
+                <ArrowUpRight
+                  size={18}
+                  className="transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"
+                />
+              </a>
             </div>
           </div>
         </div>
@@ -236,12 +155,12 @@ const ContactSection = () => {
               © {new Date().getFullYear()} Portfolio. Crafted with precision.
             </p>
             <div className="flex gap-8">
-              <a
-                href="#"
+              <button
+                onClick={openResume}
                 className="text-sm text-zinc-500 transition-colors hover:text-white"
               >
-                Resume
-              </a>
+                View Resume
+              </button>
               <a
                 href="#"
                 className="text-sm text-zinc-500 transition-colors hover:text-white"

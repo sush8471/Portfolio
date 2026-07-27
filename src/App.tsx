@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
+import StickyNav from './StickyNav';
 import ScrollVideoComponent from './ScrollVideoComponent';
 import AboutSection from './AboutSection';
 import StackBentoGrid from './StackBentoGrid';
@@ -11,6 +12,8 @@ import CertificationsSection from './CertificationsSection';
 import TestimonialsSection from './TestimonialsSection';
 import ContactSection from './ContactSection';
 import NoiseOverlay from './NoiseOverlay';
+import { ResumeViewerProvider } from './ResumeViewerContext';
+import ResumeViewer from './ResumeViewer';
 
 import { usePrefersReducedMotion } from './usePrefersReducedMotion';
 
@@ -26,13 +29,14 @@ function App() {
 
     if (!reducedMotion) {
       lenis = new Lenis({
-        duration: 1.2,
+        duration: 1.1,
         easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
         orientation: 'vertical',
         gestureOrientation: 'vertical',
         smoothWheel: true,
-        wheelMultiplier: 1,
-        touchMultiplier: 2,
+        wheelMultiplier: 0.8,
+        touchMultiplier: 1,
+        syncTouch: true,
       });
 
       lenisRef.current = lenis;
@@ -84,17 +88,41 @@ function App() {
         .lenis.lenis-stopped {
           overflow: hidden;
         }
+        *:focus-visible {
+          outline: 2px solid rgba(255,255,255,0.3);
+          outline-offset: 2px;
+          border-radius: 4px;
+        }
+        .scrollbar-none::-webkit-scrollbar {
+          display: none;
+        }
+        .scrollbar-none {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          *, *::before, *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+            scroll-behavior: auto !important;
+          }
+        }
       `}</style>
 
-      <NoiseOverlay />
-      <ScrollVideoComponent />
-      <AboutSection />
-      <StackBentoGrid />
-      <CertificationsSection />
-      <GitHubContributionGraph username="sush8471" />
-      <ProjectsSection />
-      <TestimonialsSection />
-      <ContactSection />
+      <ResumeViewerProvider>
+        <StickyNav />
+        <NoiseOverlay />
+        <ScrollVideoComponent />
+        <AboutSection />
+        <StackBentoGrid />
+        <CertificationsSection />
+        <GitHubContributionGraph username="sush8471" />
+        <ProjectsSection />
+        <TestimonialsSection />
+        <ContactSection />
+        <ResumeViewer />
+      </ResumeViewerProvider>
     </main>
   );
 }

@@ -171,10 +171,10 @@ export default function ScrollVideoComponent() {
 
   return (
     // 1. Container Section: 200vh track height for Hero presentation.
-    <section ref={containerRef} className="relative h-[200vh] w-full">
+    <section ref={containerRef} className="relative h-[200vh] w-full" aria-label="Hero introduction">
       
       {/* 2. Sticky Canvas Wrapper: Locks in viewport while scrolling through this section only */}
-      <div className="sticky top-0 left-0 w-screen h-[100dvh] overflow-hidden z-0 pointer-events-none">
+      <div className="sticky top-0 left-0 w-screen h-[100dvh] overflow-hidden z-0 pointer-events-none" aria-hidden="true">
         {/* The HTML5 Canvas drawing our sequential images */}
         <canvas ref={canvasRef} className="w-full h-full block" />
       </div>
@@ -184,11 +184,14 @@ export default function ScrollVideoComponent() {
         
         {/* Portfolio Details Overlay */}
         <div ref={text2Ref} className="absolute text-center opacity-0 text-white drop-shadow-2xl px-4 w-full max-w-[90%] sm:max-w-xl md:max-w-3xl">
-          <h2 className="text-3xl sm:text-5xl md:text-7xl font-extrabold mb-2 md:mb-4 tracking-tight leading-tight">
+          <h1 className="text-3xl sm:text-5xl md:text-7xl font-extrabold mb-2 md:mb-4 tracking-tight leading-tight">
             Sushant Chaudhary
-          </h2>
-          <p className="text-base sm:text-lg md:text-2xl font-light mb-6 md:mb-8 text-zinc-300">
-            Aspiring AI Developer & Student Builder
+          </h1>
+          <p className="text-base sm:text-lg md:text-2xl font-light mb-2 md:mb-4 text-zinc-300">
+            AI Developer — Building Production Ready Apps with Modern Stack
+          </p>
+          <p className="text-xs sm:text-sm md:text-base font-medium tracking-widest uppercase text-zinc-500 mb-6 md:mb-8">
+            6+ shipped projects · 10+ automated workflows · IBM, Oracle & Anthropic certified
           </p>
           
           {/* Social Links */}

@@ -49,7 +49,7 @@ const certifications: Certification[] = [
     issuer: 'Oracle',
     date: 'Aug 2025',
     credentialId: '102459920OCI25AICFA',
-    verifyUrl: '#',
+    verifyUrl: 'https://catalog-education.oracle.com/ords/certview/sharebadge?id=F7DFCBF0B924B030C59B9FDB652BAB4033D44F04EB30EC4B77BE694E01F1F583',
     skills: ['Oracle Cloud', 'OCI', 'AI Foundations', 'Machine Learning'],
     image: '/images/certifications/oracle-ai.png',
   },
@@ -135,6 +135,7 @@ const CertificationsSection = () => {
 
   return (
     <section
+      id="certifications"
       ref={sectionRef}
       className="relative z-10 bg-black px-6 py-32 md:px-12 lg:px-24"
     >

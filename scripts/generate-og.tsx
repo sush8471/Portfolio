@@ -115,7 +115,7 @@ async function generate() {
             marginTop: 8,
           }}
         >
-          AI Developer & Student Builder
+          AI Developer — 6+ Shipped Projects
         </div>
 
         <div

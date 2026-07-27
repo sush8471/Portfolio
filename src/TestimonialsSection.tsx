@@ -148,7 +148,7 @@ const TestimonialsSection = () => {
         </div>
 
         {/* Scattered Cards */}
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-3 md:gap-8">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-3 md:gap-8" role="list" aria-label="Testimonials">
           {testimonials.map((t, i) => (
             <div
               key={t.author}
@@ -175,7 +175,7 @@ const TestimonialsSection = () => {
                 />
 
                 <blockquote className="mb-8 text-lg leading-relaxed text-zinc-300 md:text-xl">
-                  "{t.quote}"
+                  &ldquo;{t.quote}&rdquo;
                 </blockquote>
 
                 <div className="flex items-center gap-4">
