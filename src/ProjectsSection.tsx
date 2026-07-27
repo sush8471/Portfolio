@@ -248,7 +248,7 @@ const ProjectsSection = () => {
               {/* Content */}
               <div className="relative px-6 pt-6 pb-3 md:p-8 md:pb-6">
                 <div className="flex items-start justify-between gap-4">
-                  <h3 className="text-xl font-bold text-white transition-colors group-hover:text-zinc-200 md:text-2xl">
+                  <h3 className="text-lg font-bold text-white transition-colors group-hover:text-zinc-200 md:text-2xl">
                     {project.title}
                   </h3>
                   <button
