@@ -23,7 +23,7 @@ const StickyNav = () => {
   return (
     <>
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 bg-transparent`}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 backdrop-blur-xl bg-black/20`}
       >
         <div className="relative z-50 mx-auto flex max-w-7xl items-center justify-between px-6 py-4 md:px-12 lg:px-24">
           <a
