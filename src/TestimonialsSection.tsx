@@ -148,14 +148,14 @@ const TestimonialsSection = () => {
         </div>
 
         {/* Scattered Cards */}
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-3 md:gap-8" role="list" aria-label="Testimonials">
+        <div className="flex overflow-x-auto md:overflow-visible md:grid md:grid-cols-3 gap-3 md:gap-8 snap-x snap-mandatory py-4 -mx-6 px-6 md:mx-0 md:px-0" role="list" aria-label="Testimonials">
           {testimonials.map((t, i) => (
             <div
               key={t.author}
               ref={(el) => {
                 wrappersRef.current[i] = el;
               }}
-              className={`transition-transform duration-300 ease-out will-change-transform ${
+              className={`snap-start shrink-0 w-[80vw] min-w-[260px] md:w-auto md:min-w-0 transition-transform duration-300 ease-out will-change-transform ${
                 i === 1 ? 'md:mt-16' : i === 2 ? 'md:-mt-8' : ''
               }`}
             >
