@@ -255,11 +255,11 @@ const ProjectsSection = () => {
                     onClick={() => toggleCard(project.title)}
                     aria-expanded={!!expandedCards[project.title]}
                     aria-label={expandedCards[project.title] ? 'Hide project details' : 'Show project details'}
-                    className="flex shrink-0 items-center gap-1 rounded-full border border-zinc-700/50 bg-zinc-800/50 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-zinc-300 transition-all duration-300 hover:border-white hover:bg-white hover:text-black"
+                    className="flex shrink-0 items-center gap-1 rounded-full border border-zinc-700/50 bg-zinc-800/50 px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-300 transition-all duration-300 hover:border-white hover:bg-white hover:text-black"
                   >
                     {expandedCards[project.title] ? 'Less' : 'Details'}
                     <ChevronDown
-                      size={14}
+                      size={12}
                       className={`transition-transform duration-300 ${expandedCards[project.title] ? 'rotate-180' : ''}`}
                     />
                   </button>
