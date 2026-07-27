@@ -10,15 +10,8 @@ const navItems = [
 ];
 
 const StickyNav = () => {
-  const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const { openResume } = useResumeViewer();
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 100);
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : '';
@@ -30,13 +23,7 @@ const StickyNav = () => {
   return (
     <>
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          menuOpen
-            ? 'bg-black/80 backdrop-blur-xl'
-            : scrolled
-              ? 'bg-black/80 backdrop-blur-xl border-b border-zinc-800/50'
-              : 'bg-transparent'
-        }`}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 bg-transparent`}
       >
         <div className="relative z-50 mx-auto flex max-w-7xl items-center justify-between px-6 py-4 md:px-12 lg:px-24">
           <a
