@@ -178,7 +178,7 @@ const ProjectsSection = () => {
           ref={gridRef}
           role="list"
           aria-label="Projects grid"
-          className="flex overflow-x-auto md:overflow-visible md:grid md:grid-cols-2 gap-3 md:gap-8 snap-x snap-mandatory py-4 -mx-6 px-6 md:mx-0 md:px-0 scrollbar-hide"
+          className="flex items-start overflow-x-auto md:overflow-visible md:grid md:grid-cols-2 gap-3 md:gap-8 snap-x snap-mandatory py-4 -mx-6 px-6 md:mx-0 md:px-0 scrollbar-hide"
         >
           {projects.map((project, index) => (
             <div
