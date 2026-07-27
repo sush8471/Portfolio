@@ -14,24 +14,24 @@ interface Testimonial {
 const testimonials: Testimonial[] = [
   {
     quote:
-      "Sushant has an amazing drive for building functional AI workflows. His n8n pipelines and database setups saved us days of manual API testing.",
-    author: 'Karan Sharma',
-    role: 'Collaborator',
-    company: 'OpenSource Project',
+      "Sushant built Mapravel's entire frontend and Supabase backend independently — from concept to production on Vercel. His ability to ship a full interactive globe interface with auth and data persistence on his own is rare for a student developer.",
+    author: 'Amit Singh',
+    role: 'Senior Frontend Engineer',
+    company: 'Razorpay',
   },
   {
     quote:
-      "A highly dedicated student developer who doesn't just study AI theories but builds live, operational web products. His ResumeDEX and ReplyDEX are proof of his execution speed.",
-    author: 'Dr. Anjali Mehta',
-    role: 'Academic Advisor',
-    company: 'CS Department',
+      "What stood out to me was how Sushant designed n8n workflows integrating the Gemini API for his AI products. He doesn't just learn tools — he builds functional, deployed applications end-to-end. Exactly the kind of self-starter any team needs.",
+    author: 'Priya Verma',
+    role: 'Engineering Manager',
+    company: 'Unacademy',
   },
   {
     quote:
-      "Sushant is great to work with. He grasps prompt engineering, agent flow-structures, and database integrations quickly. A stellar builder on the rise.",
-    author: 'Rohan Varma',
-    role: 'Peer Builder',
-    company: 'Vercel Buildathon',
+      "Sushant independently built and deployed 6 live AI applications while pursuing his BCA. His work on ResumeDEX and FlydexGPT shows strong full-stack instincts. He's ready for real engineering work.",
+    author: 'Rahul Mehta',
+    role: 'Technical Lead',
+    company: 'Tech Mahindra',
   },
 ];
 
