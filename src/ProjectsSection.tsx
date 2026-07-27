@@ -70,7 +70,7 @@ const projects: Project[] = [
     highlights: ['Multi-model LLM chat', 'Template system', 'Custom context engine'],
   },
   {
-    title: 'Flydex Nutrients Analyzer',
+    title: 'Flydex Nutrients',
     description:
       'An AI-powered computer-vision application designed to analyze meal photos for instant nutritional insights with Harvard-certified precision.',
     image: '/images/projects/flydex-nutrients-analyzer.png',
