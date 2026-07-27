@@ -178,7 +178,7 @@ const ProjectsSection = () => {
           ref={gridRef}
           role="list"
           aria-label="Projects grid"
-          className="flex overflow-x-auto md:overflow-visible md:grid md:grid-cols-2 gap-8 snap-x snap-mandatory py-4 -mx-6 px-6 md:mx-0 md:px-0"
+          className="flex overflow-x-auto md:overflow-visible md:grid md:grid-cols-2 gap-3 md:gap-8 snap-x snap-mandatory py-4 -mx-6 px-6 md:mx-0 md:px-0"
         >
           {projects.map((project, index) => (
             <div
@@ -187,7 +187,7 @@ const ProjectsSection = () => {
                 cardsRef.current[index] = el;
               }}
               role="listitem"
-              className={`snap-start shrink-0 w-[290px] sm:w-[340px] md:w-auto md:shrink group relative overflow-hidden rounded-2xl border bg-zinc-900/20 backdrop-blur-sm md:backdrop-blur-md transition-all duration-700 hover:shadow-[0_0_40px_rgba(255,255,255,0.03)] ${
+              className={`snap-start shrink-0 w-[80vw] min-w-[260px] md:w-auto md:min-w-0 md:shrink group relative overflow-hidden rounded-2xl border bg-zinc-900/20 backdrop-blur-sm md:backdrop-blur-md transition-all duration-700 hover:shadow-[0_0_40px_rgba(255,255,255,0.03)] ${
                 project.badge
                   ? 'border-amber-400/40 hover:border-amber-300/60'
                   : 'border-zinc-800/50 hover:border-zinc-700/50'
@@ -246,7 +246,7 @@ const ProjectsSection = () => {
               </div>
 
               {/* Content */}
-              <div className="relative p-6 md:p-8">
+              <div className="relative px-6 pt-6 pb-3 md:p-8 md:pb-6">
                 <div className="flex items-start justify-between gap-4">
                   <h3 className="text-xl font-bold text-white transition-colors group-hover:text-zinc-200 md:text-2xl">
                     {project.title}
