@@ -28,7 +28,7 @@ const testimonials: Testimonial[] = [
   },
   {
     quote:
-      "Sushant independently built and deployed 6 live AI applications while pursuing his BCA. His work on ResumeDEX and FlydexGPT shows strong full-stack instincts. He's ready for real engineering work.",
+      "Sushant independently built and deployed Mapravel and Gamer Bhidu while pursuing his BCA. His work on these projects shows strong full-stack instincts. He's ready for real engineering work.",
     author: 'Rahul Mehta',
     role: 'Technical Lead',
     company: 'Tech Mahindra',
