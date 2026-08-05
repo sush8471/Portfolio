@@ -93,9 +93,10 @@ export default function ScrollVideoComponent() {
     if (reducedMotion) {
       // Show last frame for static experience
       animationState.frame = frameCount - 1;
-      if (images[frameCount - 1]) {
-        images[frameCount - 1].onload = renderImage;
-        if (images[frameCount - 1].complete) renderImage();
+      const lastFrame = images[frameCount - 1];
+      if (lastFrame) {
+        lastFrame.onload = renderImage;
+        if (lastFrame.complete) renderImage();
       }
       gsap.set(scrollHintRef.current, { opacity: 0 });
 
