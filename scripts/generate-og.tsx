@@ -115,7 +115,7 @@ async function generate() {
             marginTop: 8,
           }}
         >
-          AI Developer — 6+ Shipped Projects
+          AI Developer — 2 Full Products Shipped
         </div>
 
         <div

@@ -4,6 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { usePrefersReducedMotion } from './usePrefersReducedMotion';
 import MagneticButton from './MagneticButton';
 import { useResumeViewer } from './ResumeViewerContext';
+import { scrollToSection } from './scrollToSection';
 
 const AboutSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
@@ -98,7 +99,7 @@ const AboutSection = () => {
             I'm <span className="text-white">Sushant Chaudhary</span>, a BCA student and independent software developer from Uttar Pradesh, India. I build and ship production-ready AI-powered web applications using Python, TypeScript, React, and modern backend tools.
           </p>
           <p className="text-lg leading-relaxed text-zinc-400 md:text-xl">
-            Over the past 3+ years, I've independently built and deployed 6+ live products — from AI resume screeners and conversational LLM interfaces to interactive travel platforms and e-commerce stores. I design n8n automation workflows, architect Supabase backends, and deploy end-to-end on Vercel.
+            Over the past 3+ years, I've independently shipped 2 full products — an interactive travel platform and a gaming e-commerce store — plus several simpler AI wrappers and prototypes. I work with Python, React, Supabase, and deploy end-to-end on Vercel.
           </p>
           <p className="text-lg leading-relaxed text-zinc-400 md:text-xl">
             I'm currently seeking software development internships where I can contribute to real product work, ship features, and grow alongside experienced engineering teams.
@@ -107,12 +108,12 @@ const AboutSection = () => {
           {/* Metrics Row */}
           <div className="flex flex-wrap justify-center gap-x-8 gap-y-3 pt-4 pb-6">
             <div className="text-center">
-              <div className="text-2xl font-bold text-white">6+</div>
-              <div className="text-xs text-zinc-500 uppercase tracking-wider">Shipped Products</div>
+              <div className="text-2xl font-bold text-white">2</div>
+              <div className="text-xs text-zinc-500 uppercase tracking-wider">Full Products</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-white">10+</div>
-              <div className="text-xs text-zinc-500 uppercase tracking-wider">Automated Workflows</div>
+              <div className="text-2xl font-bold text-white">4</div>
+              <div className="text-xs text-zinc-500 uppercase tracking-wider">AI Prototypes</div>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-white">5</div>
@@ -143,6 +144,10 @@ const AboutSection = () => {
             <MagneticButton
               as="a"
               href="#projects"
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToSection('#projects');
+              }}
               className="rounded-full bg-white px-8 py-3 text-sm font-semibold text-black transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,255,255,0.3)]"
             >
               Explore My Work
@@ -157,6 +162,10 @@ const AboutSection = () => {
             <MagneticButton
               as="a"
               href="#contact"
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToSection('#contact');
+              }}
               className="rounded-full border border-zinc-700 bg-transparent px-8 py-3 text-sm font-semibold text-white transition-all duration-300 hover:border-zinc-500 hover:bg-zinc-900"
             >
               Get in Touch

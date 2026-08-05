@@ -5,6 +5,11 @@ html, body {
     padding: 0;
 }
 
+/* Offset sticky nav when jumping to section anchors */
+section[id] {
+  scroll-margin-top: 5rem;
+}
+
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;

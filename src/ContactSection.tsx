@@ -28,7 +28,6 @@ const socialLinks = [
   { name: 'GitHub', icon: GithubIcon, url: 'https://github.com/sush8471' },
   { name: 'LinkedIn', icon: LinkedinIcon, url: 'https://www.linkedin.com/in/sushant-chaudhary-aa062a231/' },
   { name: 'Twitter', icon: TwitterIcon, url: 'https://x.com/thats_5ush' },
-  { name: 'Email', icon: Mail, url: 'mailto:sushantcha00123@gmail.com' },
 ];
 
 const ContactSection = () => {

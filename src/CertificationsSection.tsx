@@ -159,7 +159,7 @@ const CertificationsSection = () => {
         <div
           ref={gridRef}
           data-lenis-prevent
-          className="flex overflow-x-auto md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 snap-x snap-mandatory scrollbar-none py-4 -mx-6 px-6 md:mx-0 md:px-0"
+          className="flex overflow-x-auto md:grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 snap-x snap-mandatory scrollbar-none py-4 -mx-6 px-[10vw] md:mx-0 md:px-0"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', overscrollBehaviorY: 'auto', overscrollBehaviorX: 'contain' }}
         >
           {certifications.map((cert, index) => (
@@ -168,7 +168,7 @@ const CertificationsSection = () => {
               ref={(el) => {
                 cardsRef.current[index] = el;
               }}
-              className="snap-start shrink-0 w-[290px] sm:w-[325px] md:w-auto md:shrink group relative flex flex-col overflow-hidden rounded-2xl border border-zinc-800/50 bg-zinc-900/20 p-6 backdrop-blur-md transition-all duration-500 hover:border-zinc-700/50 hover:bg-zinc-900/40 hover:shadow-[0_0_40px_rgba(255,255,255,0.03)]"
+              className="snap-center shrink-0 w-[80vw] sm:w-[80vw] md:w-auto md:snap-start md:shrink group relative flex flex-col overflow-hidden rounded-2xl border border-zinc-800/50 bg-zinc-900/20 p-5 sm:p-6 backdrop-blur-md transition-all duration-500 hover:border-zinc-700/50 hover:bg-zinc-900/40 hover:shadow-[0_0_40px_rgba(255,255,255,0.03)]"
             >
               {/* Inner glow */}
               <div className="pointer-events-none absolute -inset-px rounded-2xl opacity-0 transition-opacity duration-500 group-hover:opacity-100 bg-gradient-to-br from-white/5 to-transparent" />

@@ -339,7 +339,7 @@ const GitHubContributionGraph: React.FC<GitHubContributionGraphProps> = ({
         {/* Header */}
         <div ref={headerRef} className="mb-12">
           <p className="mb-4 text-sm font-medium uppercase tracking-[0.2em] text-zinc-500">
-            Open Source Activity
+            Project Activity
           </p>
           <h2
             className="text-4xl font-bold leading-tight tracking-tight text-white md:text-5xl lg:text-6xl"
@@ -382,7 +382,7 @@ const GitHubContributionGraph: React.FC<GitHubContributionGraphProps> = ({
         >
           <div className="mb-4 flex items-center justify-between">
             <span className="text-sm font-medium text-zinc-400">
-              @{username}'s contribution graph
+              @{username}'s project commits
             </span>
             <div className="flex items-center gap-2 text-xs text-zinc-500">
               <span>Less</span>
