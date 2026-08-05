@@ -4,7 +4,6 @@
   "scripts": {
     "dev": "vite",
     "generate:og": "bun run scripts/generate-og.tsx",
-    "prebuild": "bun run generate:og",
     "build": "tsc -b && vite build",
     "preview": "vite preview"
   },
