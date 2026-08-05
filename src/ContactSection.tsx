@@ -135,7 +135,7 @@ const ContactSection = () => {
                 href="mailto:sushantcha00123@gmail.com"
                 className="group inline-flex items-center gap-2 rounded-xl bg-white px-8 py-4 text-sm font-bold text-black transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,255,255,0.25)]"
               >
-                sushantcha00123@gmail.com
+                Send Email
                 <ArrowUpRight
                   size={18}
                   className="transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"

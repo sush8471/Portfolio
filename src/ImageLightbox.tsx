@@ -174,7 +174,7 @@ const ImageLightbox = ({ certifications, initialIndex, onClose }: ImageLightboxP
       {/* Main Container */}
       <div
         ref={containerRef}
-        className="relative flex max-w-5xl w-full flex-col items-center overflow-hidden"
+        className="relative flex max-w-6xl lg:max-w-7xl w-full flex-col items-center overflow-hidden"
       >
         {/* Scroll swiper track */}
         <div
@@ -189,18 +189,18 @@ const ImageLightbox = ({ certifications, initialIndex, onClose }: ImageLightboxP
               className="w-full shrink-0 snap-center flex flex-col items-center justify-center px-4"
             >
               {/* Image Frame */}
-              <div className="relative overflow-hidden rounded-2xl border border-zinc-800/50 bg-zinc-950/40 p-2 shadow-[0_20px_50px_rgba(0,0,0,0.8)] max-w-2xl w-full">
+              <div className="relative overflow-hidden rounded-2xl border border-zinc-800/50 bg-zinc-950/40 p-2 md:p-3 shadow-[0_20px_50px_rgba(0,0,0,0.8)] max-w-3xl md:max-w-4xl lg:max-w-5xl w-full">
                 <img
                   src={cert.image}
                   alt={cert.title}
-                  className="max-h-[50vh] w-auto max-w-full mx-auto rounded-xl object-contain"
+                  className="max-h-[55vh] md:max-h-[72vh] lg:max-h-[78vh] w-auto max-w-full mx-auto rounded-xl object-contain"
                   draggable={false}
                 />
               </div>
 
-              {/* Details Details */}
-              <div className="mt-6 text-center max-w-xl px-4">
-                <h4 className="text-lg font-bold text-white mb-1 tracking-tight line-clamp-2">
+              {/* Details */}
+              <div className="mt-5 md:mt-6 text-center max-w-2xl px-4">
+                <h4 className="text-lg md:text-xl font-bold text-white mb-1 tracking-tight line-clamp-2">
                   {cert.title}
                 </h4>
                 <p className="text-xs text-zinc-500 mb-4 font-semibold tracking-wide uppercase">

@@ -1,9 +1,8 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { gsap } from 'gsap';
-import { X, ChevronLeft, ChevronRight, TrendingUp, Sparkles } from 'lucide-react';
+import { X, Sparkles } from 'lucide-react';
 import { usePrefersReducedMotion } from './usePrefersReducedMotion';
 
-type ToolSize = 'small' | 'wide' | 'tall' | 'large';
 type ToolGroup = 'languages' | 'backend' | 'tools';
 
 interface Tool {
@@ -282,7 +281,7 @@ const getProficiencyLabel = (score: number): string => {
 const StackBentoGrid = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
-  const carouselRef = useRef<HTMLDivElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
   const modalRef = useRef<HTMLDivElement>(null);
   const modalContentRef = useRef<HTMLDivElement>(null);
@@ -294,7 +293,6 @@ const StackBentoGrid = () => {
   const [barWidth, setBarWidth] = useState(0);
   const [selectedGroup, setSelectedGroup] = useState<'all' | ToolGroup>('all');
 
-  // Stagger entry animations for headers and cards
   useEffect(() => {
     if (reducedMotion) {
       gsap.set(
@@ -308,7 +306,6 @@ const StackBentoGrid = () => {
     }
 
     const ctx = gsap.context(() => {
-      // Header entrance
       gsap.fromTo(
         headerRef.current?.children || [],
         { opacity: 0, y: 50 },
@@ -326,19 +323,18 @@ const StackBentoGrid = () => {
         }
       );
 
-      // Carousel cards stagger
       gsap.fromTo(
         cardsRef.current.filter(Boolean),
-        { opacity: 0, x: 50, scale: 0.98 },
+        { opacity: 0, y: 30, scale: 0.97 },
         {
           opacity: 1,
-          x: 0,
+          y: 0,
           scale: 1,
-          duration: 0.8,
-          stagger: 0.08,
+          duration: 0.7,
+          stagger: 0.06,
           ease: 'power3.out',
           scrollTrigger: {
-            trigger: carouselRef.current,
+            trigger: gridRef.current,
             start: 'top 85%',
             toggleActions: 'play none none reverse',
           },
@@ -349,18 +345,22 @@ const StackBentoGrid = () => {
     return () => ctx.revert();
   }, [reducedMotion]);
 
-  // Re-run card animations when filter selection changes
+  const filteredTools = tools.filter(
+    (t) => selectedGroup === 'all' || t.group === selectedGroup
+  );
+
   useEffect(() => {
+    cardsRef.current = cardsRef.current.slice(0, filteredTools.length);
     if (reducedMotion) return;
     const cards = cardsRef.current.filter(Boolean);
     if (cards.length > 0) {
       gsap.fromTo(
         cards,
-        { opacity: 0, scale: 0.96, y: 15 },
-        { opacity: 1, scale: 1, y: 0, duration: 0.5, stagger: 0.05, ease: 'power2.out' }
+        { opacity: 0, scale: 0.96, y: 12 },
+        { opacity: 1, scale: 1, y: 0, duration: 0.45, stagger: 0.04, ease: 'power2.out' }
       );
     }
-  }, [selectedGroup, reducedMotion]);
+  }, [selectedGroup, reducedMotion, filteredTools.length]);
 
   // Modal GSAP Animation
   useEffect(() => {
@@ -444,15 +444,6 @@ const StackBentoGrid = () => {
     });
   };
 
-  const scrollCarousel = (direction: 'left' | 'right') => {
-    if (!carouselRef.current) return;
-    const scrollAmount = carouselRef.current.clientWidth * 0.75;
-    carouselRef.current.scrollBy({
-      left: direction === 'left' ? -scrollAmount : scrollAmount,
-      behavior: 'smooth',
-    });
-  };
-
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (reducedMotion) return;
     const el = e.currentTarget;
@@ -475,11 +466,6 @@ const StackBentoGrid = () => {
     el.style.transform = 'perspective(1000px) rotateY(0deg) rotateX(0deg) scale3d(1, 1, 1)';
   };
 
-  // Filter tools based on active group state
-  const filteredTools = tools.filter(
-    (t) => selectedGroup === 'all' || t.group === selectedGroup
-  );
-
   return (
     <section
       id="stack"
@@ -487,43 +473,25 @@ const StackBentoGrid = () => {
       className="relative z-10 bg-black px-6 py-32 md:px-12 lg:px-24 overflow-hidden"
     >
       <div className="mx-auto max-w-7xl relative">
-        {/* Header & Navigation controls */}
-        <div ref={headerRef} className="flex flex-col md:flex-row md:items-end md:justify-between mb-10 gap-6">
-          <div>
-            <p className="mb-4 text-sm font-medium uppercase tracking-[0.2em] text-zinc-500">
-              The Toolkit
-            </p>
-            <h2
-              className="text-4xl font-bold leading-tight tracking-tight text-white md:text-5xl lg:text-6xl"
-              style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
-            >
-              Stack that powers
-              <br />
-              <span className="text-zinc-400">the craft</span>
-            </h2>
-          </div>
-
-          {/* Desktop Navigation Buttons */}
-          <div className="hidden md:flex gap-3">
-            <button
-              onClick={() => scrollCarousel('left')}
-              className="group flex h-12 w-12 items-center justify-center rounded-full border border-zinc-800 bg-zinc-900/30 text-zinc-400 backdrop-blur-md transition-all duration-300 hover:border-zinc-600 hover:bg-zinc-800 hover:text-white"
-              aria-label="Previous slide"
-            >
-              <ChevronLeft size={20} className="transition-transform duration-300 group-hover:-translate-x-0.5" />
-            </button>
-            <button
-              onClick={() => scrollCarousel('right')}
-              className="group flex h-12 w-12 items-center justify-center rounded-full border border-zinc-800 bg-zinc-900/30 text-zinc-400 backdrop-blur-md transition-all duration-300 hover:border-zinc-600 hover:bg-zinc-800 hover:text-white"
-              aria-label="Next slide"
-            >
-              <ChevronRight size={20} className="transition-transform duration-300 group-hover:translate-x-0.5" />
-            </button>
-          </div>
+        <div ref={headerRef} className="mb-10">
+          <p className="mb-4 text-sm font-medium uppercase tracking-[0.2em] text-zinc-500">
+            The Toolkit
+          </p>
+          <h2
+            className="text-4xl font-bold leading-tight tracking-tight text-white md:text-5xl lg:text-6xl"
+            style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
+          >
+            Stack that powers
+            <br />
+            <span className="text-zinc-400">the craft</span>
+          </h2>
         </div>
 
-        {/* Categories Tab Filtering Navigation Row */}
-        <div className="flex flex-wrap gap-2 mb-10 border-b border-zinc-900 pb-6">
+        {/* Category filters — scrollable pills on mobile */}
+        <div
+          className="flex gap-2 mb-10 border-b border-zinc-900 pb-6 overflow-x-auto scrollbar-none -mx-6 px-6 md:mx-0 md:px-0 md:flex-wrap"
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        >
           {(
             [
               { id: 'all', label: 'All Stack' },
@@ -535,7 +503,7 @@ const StackBentoGrid = () => {
             <button
               key={tab.id}
               onClick={() => setSelectedGroup(tab.id)}
-              className={`rounded-full px-5 py-2 text-xs font-semibold tracking-wide transition-all duration-300 backdrop-blur-md border ${
+              className={`shrink-0 rounded-full px-4 sm:px-5 py-2 text-xs font-semibold tracking-wide transition-all duration-300 backdrop-blur-md border ${
                 selectedGroup === tab.id
                   ? 'bg-white border-white text-black shadow-lg shadow-white/5'
                   : 'bg-zinc-900/30 border-zinc-800/80 text-zinc-400 hover:text-white hover:border-zinc-700'
@@ -546,11 +514,10 @@ const StackBentoGrid = () => {
           ))}
         </div>
 
-        {/* Slidable Carousel track */}
+        {/* Responsive grid — compact on mobile, rich on desktop */}
         <div
-          ref={carouselRef}
-          className="flex gap-4 overflow-x-auto scrollbar-none snap-x snap-mandatory py-4 px-2 -mx-2 select-none"
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          ref={gridRef}
+          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4"
         >
           {filteredTools.map((tool, index) => {
             const LogoComponent = tool.icon;
@@ -564,15 +531,13 @@ const StackBentoGrid = () => {
                 onClick={() => handleCardClick(tool)}
                 onMouseMove={handleMouseMove}
                 onMouseLeave={handleMouseLeave}
-                className="snap-start shrink-0 w-[280px] sm:w-[320px] h-[340px] group relative overflow-hidden rounded-2xl border border-zinc-800/60 bg-zinc-900/10 p-6 backdrop-blur-md transition-[border-color,box-shadow] duration-300 cursor-pointer hover:border-zinc-700 hover:shadow-[0_0_40px_rgba(var(--glow),0.05)]"
+                className="group relative overflow-hidden rounded-2xl border border-zinc-800/60 bg-zinc-900/10 p-4 sm:p-5 md:p-6 backdrop-blur-md transition-[border-color,box-shadow] duration-300 cursor-pointer hover:border-zinc-700 hover:shadow-[0_0_40px_rgba(var(--glow),0.05)] min-h-[160px] sm:min-h-[180px] md:min-h-[280px] md:h-full"
                 style={{
                   transformStyle: 'preserve-3d',
                   willChange: 'transform',
-                  scrollSnapAlign: 'start',
                   ['--glow' as any]: tool.glowColor,
                 }}
               >
-                {/* Brand-Specific Spotlight Gradient on Hover */}
                 <div
                   className="pointer-events-none absolute -inset-px rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
                   style={{
@@ -580,47 +545,46 @@ const StackBentoGrid = () => {
                   }}
                 />
 
-                <div className="relative flex h-full flex-col justify-between">
+                <div className="relative flex h-full flex-col justify-between gap-3">
                   <div>
-                    {/* Top row: Icon and Category badge */}
-                    <div className="flex items-start justify-between mb-8">
-                      <div className="flex items-center justify-center rounded-2xl bg-zinc-900/80 border border-zinc-800/60 p-3.5 text-zinc-300 shadow-[inset_0_1px_2px_rgba(255,255,255,0.05)] w-14 h-14">
+                    <div className="flex items-start justify-between mb-4 md:mb-6">
+                      <div className="flex items-center justify-center rounded-xl md:rounded-2xl bg-zinc-900/80 border border-zinc-800/60 p-2.5 md:p-3.5 text-zinc-300 shadow-[inset_0_1px_2px_rgba(255,255,255,0.05)] w-11 h-11 md:w-14 md:h-14">
                         <LogoComponent className="h-full w-full" />
                       </div>
-                      <span className="rounded-full border border-zinc-800/50 bg-zinc-900/60 px-3.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-400 backdrop-blur-sm shadow-sm">
+                      <span className="hidden sm:inline-flex rounded-full border border-zinc-800/50 bg-zinc-900/60 px-2.5 md:px-3.5 py-1 text-[9px] md:text-[10px] font-semibold uppercase tracking-wider text-zinc-400 backdrop-blur-sm shadow-sm">
                         {tool.category}
                       </span>
                     </div>
 
-                    {/* Mid row: Name and Description */}
-                    <h3 className="font-bold text-white text-xl md:text-2xl tracking-wide mb-3">
+                    <h3 className="font-bold text-white text-base sm:text-lg md:text-xl tracking-wide mb-1.5 md:mb-3">
                       {tool.name}
                     </h3>
-                    <p className="text-zinc-400 text-sm leading-relaxed line-clamp-3">
+                    <p className="hidden md:block text-zinc-400 text-sm leading-relaxed line-clamp-3">
                       {tool.description}
+                    </p>
+                    <p className="md:hidden text-[11px] sm:text-xs text-zinc-500 uppercase tracking-wider font-medium">
+                      {tool.category}
                     </p>
                   </div>
 
-                  {/* Bottom: Action bar showing stats prompt */}
-                  <div className="flex items-center justify-between pt-4 border-t border-zinc-800/40">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 group-hover:text-white transition-colors duration-300">
-                      Explore Proficiency
+                  <div className="flex items-center justify-between pt-3 md:pt-4 border-t border-zinc-800/40">
+                    <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-zinc-500 group-hover:text-white transition-colors duration-300">
+                      <span className="md:hidden">View</span>
+                      <span className="hidden md:inline">Explore Proficiency</span>
                     </span>
-                    {/* Pulse element */}
                     <span className="relative flex h-2 w-2">
                       <span
                         className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"
                         style={{ backgroundColor: `rgb(${tool.glowColor})` }}
-                      ></span>
+                      />
                       <span
                         className="relative inline-flex rounded-full h-2 w-2"
                         style={{ backgroundColor: `rgb(${tool.glowColor})` }}
-                      ></span>
+                      />
                     </span>
                   </div>
                 </div>
 
-                {/* Bottom subtle edge light matching brand color */}
                 <div
                   className="absolute inset-x-0 bottom-0 h-px opacity-0 transition-opacity duration-300 group-hover:opacity-100"
                   style={{
