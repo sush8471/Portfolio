@@ -225,14 +225,14 @@ export default function ScrollVideoComponent() {
         >
           <p
             data-intro
-            className="mb-5 text-xs font-medium uppercase tracking-[0.28em] text-zinc-500 md:mb-6"
+            className="mb-5 text-[10px] font-medium uppercase tracking-[0.28em] text-zinc-500 md:mb-6 md:text-xs"
           >
             AI Developer · Student Builder
           </p>
 
           <h1
             data-intro
-            className="mb-5 text-4xl font-extrabold tracking-tight text-white sm:text-5xl md:mb-6 md:text-7xl lg:text-8xl"
+            className="mb-5 text-5xl font-extrabold tracking-tight text-white sm:text-6xl md:mb-6 md:text-7xl lg:text-8xl xl:text-9xl"
             style={{ fontFamily: "Inter, system-ui, sans-serif" }}
           >
             Sushant Chaudhary
@@ -240,7 +240,7 @@ export default function ScrollVideoComponent() {
 
           <p
             data-intro
-            className="mb-4 max-w-2xl text-base font-light leading-relaxed text-zinc-300 sm:text-lg md:mb-5 md:text-2xl"
+            className="mb-4 max-w-2xl text-sm font-light leading-relaxed text-zinc-400 sm:text-base md:mb-5 md:text-xl"
           >
             Building production-ready apps with a modern stack
           </p>
