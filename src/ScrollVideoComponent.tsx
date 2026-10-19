@@ -245,16 +245,6 @@ export default function ScrollVideoComponent() {
             Building production-ready apps with a modern stack
           </p>
 
-          <p
-            data-intro
-            className="mb-10 max-w-xl text-[11px] font-medium uppercase tracking-[0.18em] text-zinc-500 sm:text-xs md:mb-12 md:tracking-[0.22em]"
-          >
-            2 full products shipped · AI prototypes &amp; wrappers
-            <span className="hidden sm:inline"> · </span>
-            <br className="sm:hidden" />
-            IBM, Oracle &amp; Anthropic certified
-          </p>
-
           <div data-intro className="flex items-center gap-4">
             <a
               href="https://github.com/sush8471"
