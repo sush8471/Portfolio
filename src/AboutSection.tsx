@@ -2,66 +2,74 @@ import { useRef, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { usePrefersReducedMotion } from './usePrefersReducedMotion';
-import MagneticButton from './MagneticButton';
 import { useResumeViewer } from './ResumeViewerContext';
 import { scrollToSection } from './scrollToSection';
 
+const stats = [
+  { value: '2', label: 'Full Products Shipped' },
+  { value: '4', label: 'AI Prototypes Built' },
+  { value: '5', label: 'Certifications' },
+  { value: '3+', label: 'Years Building' },
+];
+
+const stack = ['Python', 'TypeScript', 'React', 'Supabase', 'Vercel', 'AI/ML APIs'];
+
 const AboutSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
-  const headingRef = useRef<HTMLHeadingElement>(null);
-  const bioRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
   const reducedMotion = usePrefersReducedMotion();
   const { openResume } = useResumeViewer();
 
   useEffect(() => {
+    const contentTargets = contentRef.current
+      ? Array.from(contentRef.current.children).flatMap((child) =>
+          Array.from(child.children)
+        )
+      : [];
+
     if (reducedMotion) {
       gsap.set(
-        [
-          headingRef.current,
-          ...(bioRef.current?.children || []),
-        ],
+        [Array.from(headerRef.current?.children || []), ...contentTargets],
         { opacity: 1, y: 0 }
       );
       return;
     }
 
     const ctx = gsap.context(() => {
-      // Heading reveal
       gsap.fromTo(
-        headingRef.current,
-        { opacity: 0, y: 60 },
+        Array.from(headerRef.current?.children || []),
+        { opacity: 0, y: 50 },
         {
           opacity: 1,
           y: 0,
-          duration: 1,
+          duration: 0.9,
+          stagger: 0.12,
           ease: 'power3.out',
           scrollTrigger: {
-            trigger: headingRef.current,
+            trigger: headerRef.current,
             start: 'top 85%',
             toggleActions: 'play none none reverse',
           },
         }
       );
 
-      // Bio text paragraphs stagger reveal
-      if (bioRef.current) {
-        gsap.fromTo(
-          bioRef.current.children,
-          { opacity: 0, y: 30 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.8,
-            stagger: 0.15,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: bioRef.current,
-              start: 'top 85%',
-              toggleActions: 'play none none reverse',
-            },
-          }
-        );
-      }
+      gsap.fromTo(
+        contentTargets,
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          stagger: 0.08,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: contentRef.current,
+            start: 'top 85%',
+            toggleActions: 'play none none reverse',
+          },
+        }
+      );
     }, sectionRef);
 
     return () => ctx.revert();
@@ -71,105 +79,106 @@ const AboutSection = () => {
     <section
       id="about"
       ref={sectionRef}
-      className="relative z-10 bg-black px-6 py-32 md:px-12 lg:px-24"
+      className="relative z-10 bg-black px-6 py-24 text-white"
     >
-      {/* Subtle top gradient to blend from video */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-transparent to-black" />
+      <div className="mx-auto max-w-6xl">
+        {/* 1. HEADLINE + STATUS */}
+        <div
+          ref={headerRef}
+          className="mb-16 flex flex-col md:flex-row md:items-end md:justify-between"
+        >
+          <div>
+            <p className="mb-4 text-sm uppercase tracking-[0.2em] text-zinc-400">
+              About
+            </p>
+            <h2
+              className="text-5xl font-bold leading-none tracking-tight md:text-7xl"
+              style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
+            >
+              Engineering intelligence.
+              <br />
+              <span className="text-zinc-400">Designing interactions.</span>
+            </h2>
+          </div>
 
-      <div className="mx-auto max-w-4xl">
-        {/* Section Header */}
-        <div className="mb-16 text-center">
-          <p className="mb-4 text-sm font-medium uppercase tracking-[0.2em] text-zinc-500">
-            About Me
-          </p>
-          <h2
-            ref={headingRef}
-            className="text-4xl font-bold leading-tight tracking-tight text-white md:text-5xl lg:text-6xl"
-            style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
-          >
-            Engineering intelligence.
-            <br />
-            <span className="text-zinc-400">Designing interactions.</span>
-          </h2>
+          {/* Status Badge */}
+          <div className="mt-6 flex w-fit items-center gap-2 rounded-full border border-green-500/20 bg-green-500/10 px-3 py-1.5 md:mt-0 md:px-4 md:py-2">
+            <span className="relative flex h-2.5 w-2.5 md:h-3 md:w-3">
+              {!reducedMotion && (
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
+              )}
+              <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-green-500 md:h-3 md:w-3" />
+            </span>
+            <span className="text-xs font-medium text-green-400 md:text-sm">
+              Open to SDE Internships
+            </span>
+          </div>
         </div>
 
-        {/* Story Bio */}
-        <div ref={bioRef} className="space-y-8 text-center">
-          <p className="text-lg leading-relaxed text-zinc-300 md:text-xl font-medium">
-            I'm <span className="text-white">Sushant Chaudhary</span>, a BCA student and independent software developer from Uttar Pradesh, India. I build and ship production-ready AI-powered web applications using Python, TypeScript, React, and modern backend tools.
-          </p>
-          <p className="text-lg leading-relaxed text-zinc-400 md:text-xl">
-            Over the past 3+ years, I've independently shipped 2 full products — an interactive travel platform and a gaming e-commerce store — plus several simpler AI wrappers and prototypes. I work with Python, React, Supabase, and deploy end-to-end on Vercel.
-          </p>
-          <p className="text-lg leading-relaxed text-zinc-400 md:text-xl">
-            I'm currently seeking software development internships where I can contribute to real product work, ship features, and grow alongside experienced engineering teams.
-          </p>
+        <div ref={contentRef}>
+          {/* 3. STATS BENTO */}
+          <div className="mb-20 grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4">
+            {stats.map((stat) => (
+              <div
+                key={stat.label}
+                className="rounded-xl border border-zinc-800/50 bg-zinc-900/20 p-4 backdrop-blur-md sm:p-5 md:rounded-2xl md:p-6"
+              >
+                <div className="mb-1 text-3xl font-bold text-white md:text-4xl">{stat.value}</div>
+                <div className="text-xs text-zinc-400 md:text-sm">{stat.label}</div>
+              </div>
+            ))}
+          </div>
 
-          {/* Metrics Row */}
-          <div className="flex flex-wrap justify-center gap-x-8 gap-y-3 pt-4 pb-6">
-            <div className="text-center">
-              <div className="text-2xl font-bold text-white">2</div>
-              <div className="text-xs text-zinc-500 uppercase tracking-wider">Full Products</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-white">4</div>
-              <div className="text-xs text-zinc-500 uppercase tracking-wider">AI Prototypes</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-white">5</div>
-              <div className="text-xs text-zinc-500 uppercase tracking-wider">Certifications</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-white">3+</div>
-              <div className="text-xs text-zinc-500 uppercase tracking-wider">Years Building</div>
+          {/* 4. TECH STACK */}
+          <div className="mb-20">
+            <p className="mb-6 text-xs uppercase tracking-wider text-zinc-400">
+              Primary Stack
+            </p>
+            <div className="flex flex-wrap gap-3">
+              {stack.map((tech) => (
+                <span
+                  key={tech}
+                  className="rounded-lg border border-zinc-800/60 bg-zinc-900/20 px-4 py-2 font-mono text-sm text-zinc-300"
+                >
+                  {tech}
+                </span>
+              ))}
             </div>
           </div>
 
-          <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 pt-6 text-sm text-zinc-500">
-            <span className="flex items-center gap-1.5">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-              Uttar Pradesh, India
-            </span>
-            <span className="flex items-center gap-1.5">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 1.7 1.3 3 3 3h6c1.7 0 3-1.3 3-3v-5"/></svg>
-              BCA · Integral University Lucknow · 2023 – 2026
-            </span>
-            <span className="flex items-center gap-1.5">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-              Open to Internships & Full-Time
-            </span>
-          </div>
-
-          <div className="flex flex-wrap justify-center gap-4 pt-6">
-            <MagneticButton
-              as="a"
-              href="#projects"
+          {/* 5. SINGLE CTA */}
+          <div className="flex flex-col gap-4 sm:flex-row">
+            <a
+              href="#work"
               onClick={(e) => {
                 e.preventDefault();
-                scrollToSection('#projects');
+                scrollToSection('#work');
               }}
-              className="rounded-full bg-white px-8 py-3 text-sm font-semibold text-black transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,255,255,0.3)]"
+              className="inline-flex items-center justify-center rounded-full bg-white px-8 py-4 font-semibold text-black transition-colors hover:bg-zinc-200"
             >
-              Explore My Work
-            </MagneticButton>
-            <MagneticButton
-              as="button"
+              View Selected Work
+              <svg
+                className="ml-2 h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M17 8l4 4m0 0l-4 4m4-4H3"
+                />
+              </svg>
+            </a>
+            <button
+              type="button"
               onClick={openResume}
-              className="rounded-full border border-zinc-600 bg-zinc-900 px-8 py-3 text-sm font-semibold text-white transition-all duration-300 hover:border-white hover:bg-white hover:text-black"
+              className="inline-flex items-center justify-center rounded-full border border-zinc-700 px-8 py-4 font-medium text-zinc-300 transition-colors hover:border-zinc-500"
             >
-              View Resume
-            </MagneticButton>
-            <MagneticButton
-              as="a"
-              href="#contact"
-              onClick={(e) => {
-                e.preventDefault();
-                scrollToSection('#contact');
-              }}
-              className="rounded-full border border-zinc-700 bg-transparent px-8 py-3 text-sm font-semibold text-white transition-all duration-300 hover:border-zinc-500 hover:bg-zinc-900"
-            >
-              Get in Touch
-            </MagneticButton>
+              Resume
+            </button>
           </div>
         </div>
       </div>
