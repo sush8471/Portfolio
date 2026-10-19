@@ -188,7 +188,7 @@ const ProjectsSection = () => {
                 cardsRef.current[index] = el;
               }}
               role="listitem"
-              className={`snap-center shrink-0 w-[80vw] md:w-auto md:min-w-0 md:snap-start md:shrink group relative overflow-hidden rounded-2xl border bg-zinc-900/20 backdrop-blur-sm md:backdrop-blur-md transition-all duration-700 hover:shadow-[0_0_40px_rgba(255,255,255,0.03)] ${
+              className={`snap-center shrink-0 w-[65vw] md:w-auto md:min-w-0 md:snap-start md:shrink group relative overflow-hidden rounded-2xl border bg-zinc-900/20 backdrop-blur-sm md:backdrop-blur-md transition-all duration-700 hover:shadow-[0_0_40px_rgba(255,255,255,0.03)] ${
                 project.badge
                   ? 'border-amber-400/40 hover:border-amber-300/60'
                   : 'border-zinc-800/50 hover:border-zinc-700/50'
