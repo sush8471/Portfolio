@@ -149,7 +149,7 @@ const ProjectsSection = () => {
 
   return (
     <section
-      id="projects"
+      id="work"
       ref={sectionRef}
       className="relative z-10 bg-black px-6 py-32 md:px-12 lg:px-24"
     >

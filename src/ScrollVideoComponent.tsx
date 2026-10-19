@@ -297,10 +297,10 @@ export default function ScrollVideoComponent() {
               </svg>
             </a>
             <a
-              href="#projects"
+              href="#work"
               onClick={(e) => {
                 e.preventDefault();
-                scrollToSection("#projects");
+                scrollToSection("#work");
               }}
               className="ml-1 rounded-full border border-zinc-700 bg-white px-6 py-3 text-xs font-bold uppercase tracking-wider text-black transition-all duration-300 hover:bg-zinc-200 active:scale-[0.98] md:px-7"
             >
