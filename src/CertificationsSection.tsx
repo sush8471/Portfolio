@@ -146,7 +146,7 @@ const CertificationsSection = () => {
             Credentials
           </p>
           <h2
-            className="text-4xl font-bold leading-tight tracking-tight text-white md:text-5xl lg:text-6xl"
+            className="text-4xl font-normal leading-tight tracking-tight text-white md:text-5xl lg:text-6xl"
             style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
           >
             Validated by

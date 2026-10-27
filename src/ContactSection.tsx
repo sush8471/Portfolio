@@ -90,7 +90,7 @@ const ContactSection = () => {
               Let's Connect
             </p>
             <h2
-              className="mb-6 text-4xl font-bold leading-tight tracking-tight text-white md:text-5xl lg:text-6xl"
+              className="mb-6 text-4xl font-normal leading-tight tracking-tight text-white md:text-5xl lg:text-6xl"
               style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
             >
               Have a project

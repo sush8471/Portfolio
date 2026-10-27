@@ -92,7 +92,7 @@ const AboutSection = () => {
               About
             </p>
             <h2
-              className="text-5xl font-bold leading-none tracking-tight md:text-7xl"
+              className="text-5xl font-normal leading-none tracking-tight md:text-7xl"
               style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
             >
               Engineering intelligence.

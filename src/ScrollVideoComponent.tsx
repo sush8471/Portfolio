@@ -216,7 +216,7 @@ export default function ScrollVideoComponent() {
       {/* ── Identity intro — sits fully below the film ── */}
       <section
         ref={introRef}
-        className="relative z-10 -mt-px bg-black px-6 pb-20 pt-10 md:px-12 md:pb-28 md:pt-16 lg:px-24"
+        className="relative z-10 -mt-px flex min-h-[100svh] items-center justify-center bg-black px-6 pb-20 pt-10 md:block md:min-h-0 md:px-12 md:pb-28 md:pt-16 lg:px-24"
         aria-label="Introduction"
       >
         <div
@@ -232,7 +232,7 @@ export default function ScrollVideoComponent() {
 
           <h1
             data-intro
-            className="mb-5 text-5xl font-extrabold tracking-tight text-white sm:text-6xl md:mb-6 md:text-7xl lg:text-8xl xl:text-9xl"
+            className="mb-5 whitespace-nowrap text-[clamp(1rem,5vw,6rem)] font-medium tracking-tight text-white md:mb-6"
             style={{ fontFamily: "Inter, system-ui, sans-serif" }}
           >
             Sushant Chaudhary
@@ -245,16 +245,16 @@ export default function ScrollVideoComponent() {
             Building production-ready apps with a modern stack
           </p>
 
-          <div data-intro className="flex items-center gap-4">
+          <div data-intro className="flex items-center gap-3 md:gap-4">
             <a
               href="https://github.com/sush8471"
               target="_blank"
               rel="noreferrer"
-              className="flex h-12 w-12 items-center justify-center rounded-full border border-zinc-800 bg-zinc-900/40 text-zinc-300 transition-all duration-300 hover:border-zinc-500 hover:bg-zinc-800 hover:text-white"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-zinc-800 bg-zinc-900/40 text-zinc-300 transition-all duration-300 hover:border-zinc-500 hover:bg-zinc-800 hover:text-white md:h-12 md:w-12"
             >
               <span className="sr-only">GitHub</span>
               <svg
-                className="h-5 w-5"
+                className="h-4 w-4 md:h-5 md:w-5"
                 fill="currentColor"
                 viewBox="0 0 24 24"
                 aria-hidden="true"
@@ -270,11 +270,11 @@ export default function ScrollVideoComponent() {
               href="https://www.linkedin.com/in/sushant-chaudhary-aa062a231/"
               target="_blank"
               rel="noreferrer"
-              className="flex h-12 w-12 items-center justify-center rounded-full border border-zinc-800 bg-zinc-900/40 text-zinc-300 transition-all duration-300 hover:border-zinc-500 hover:bg-zinc-800 hover:text-white"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-zinc-800 bg-zinc-900/40 text-zinc-300 transition-all duration-300 hover:border-zinc-500 hover:bg-zinc-800 hover:text-white md:h-12 md:w-12"
             >
               <span className="sr-only">LinkedIn</span>
               <svg
-                className="h-5 w-5"
+                className="h-4 w-4 md:h-5 md:w-5"
                 fill="currentColor"
                 viewBox="0 0 24 24"
                 aria-hidden="true"
@@ -292,7 +292,7 @@ export default function ScrollVideoComponent() {
                 e.preventDefault();
                 scrollToSection("#work");
               }}
-              className="ml-1 rounded-full border border-zinc-700 bg-white px-6 py-3 text-xs font-bold uppercase tracking-wider text-black transition-all duration-300 hover:bg-zinc-200 active:scale-[0.98] md:px-7"
+              className="ml-1 rounded-full border border-zinc-700 bg-white px-5 py-2.5 text-[11px] font-bold uppercase tracking-wider text-black transition-all duration-300 hover:bg-zinc-200 active:scale-[0.98] md:px-7 md:py-3 md:text-xs"
             >
               View Work
             </a>
