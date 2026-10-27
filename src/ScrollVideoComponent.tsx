@@ -216,7 +216,7 @@ export default function ScrollVideoComponent() {
       {/* ── Identity intro — sits fully below the film ── */}
       <section
         ref={introRef}
-        className="relative z-10 -mt-px flex min-h-[100svh] items-center justify-center bg-black px-6 pb-20 pt-10 md:block md:min-h-0 md:px-12 md:pb-28 md:pt-16 lg:px-24"
+        className="relative z-10 -mt-px bg-black px-6 py-12 text-center md:px-12 md:py-16 lg:px-24"
         aria-label="Introduction"
       >
         <div
