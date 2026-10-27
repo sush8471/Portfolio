@@ -232,7 +232,7 @@ export default function ScrollVideoComponent() {
 
           <h1
             data-intro
-            className="mb-5 whitespace-nowrap text-[clamp(1rem,5vw,6rem)] font-medium tracking-tight text-white md:mb-6"
+            className="mb-5 whitespace-nowrap text-[clamp(1.75rem,6.5vw,8rem)] font-semibold tracking-tight text-white md:mb-6"
             style={{ fontFamily: "Inter, system-ui, sans-serif" }}
           >
             Sushant Chaudhary
