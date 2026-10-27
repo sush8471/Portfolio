@@ -4,7 +4,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Mail, ArrowUpRight } from 'lucide-react';
 import { usePrefersReducedMotion } from './usePrefersReducedMotion';
 import { useResumeViewer } from './ResumeViewerContext';
-import WebVitalsBadge from './WebVitalsBadge';
 
 const GithubIcon = ({ size = 20 }: { size?: number }) => (
   <svg width={size} height={size} fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -146,9 +145,6 @@ const ContactSection = () => {
 
         {/* Footer */}
         <footer className="mt-32 border-t border-zinc-900 pt-10">
-          <div className="mb-6 flex justify-start">
-            <WebVitalsBadge />
-          </div>
           <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
             <p className="text-sm text-zinc-600">
               © {new Date().getFullYear()} Portfolio. Crafted with precision.
@@ -160,18 +156,6 @@ const ContactSection = () => {
               >
                 View Resume
               </button>
-              <a
-                href="#"
-                className="text-sm text-zinc-500 transition-colors hover:text-white"
-              >
-                Colophon
-              </a>
-              <a
-                href="#"
-                className="text-sm text-zinc-500 transition-colors hover:text-white"
-              >
-                Source
-              </a>
             </div>
           </div>
         </footer>
