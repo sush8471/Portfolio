@@ -3,6 +3,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { usePrefersReducedMotion } from "./usePrefersReducedMotion";
 import { scrollToSection } from "./scrollToSection";
+import { DiaText } from "@/components/ui/dia-text";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -230,13 +231,19 @@ export default function ScrollVideoComponent() {
             AI Developer · Student Builder
           </p>
 
-          <h1
+          <DiaText
+            as="h1"
             data-intro
-            className="mb-5 whitespace-nowrap text-[clamp(2rem,7.5vw,9.5rem)] font-bold tracking-tight text-white md:mb-6"
+            variant="sweep"
+            repeat={false}
+            once={true}
+            duration={2.2}
+            textColor="#ffffff"
+            className="mb-5 whitespace-nowrap text-[clamp(2rem,7.5vw,9.5rem)] font-bold tracking-tight text-white md:mb-6 py-2 overflow-visible"
             style={{ fontFamily: "Inter, system-ui, sans-serif" }}
           >
             Sushant Chaudhary
-          </h1>
+          </DiaText>
 
           <p
             data-intro

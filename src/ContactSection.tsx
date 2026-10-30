@@ -4,6 +4,8 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Mail, ArrowUpRight } from 'lucide-react';
 import { usePrefersReducedMotion } from './usePrefersReducedMotion';
 import { useResumeViewer } from './ResumeViewerContext';
+import { FooterSignature } from '@/components/ui/footer-signature';
+import type { FooterSocialItem } from '@/components/ui/footer';
 
 const GithubIcon = ({ size = 20 }: { size?: number }) => (
   <svg width={size} height={size} fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -27,6 +29,24 @@ const socialLinks = [
   { name: 'GitHub', icon: GithubIcon, url: 'https://github.com/sush8471' },
   { name: 'LinkedIn', icon: LinkedinIcon, url: 'https://www.linkedin.com/in/sushant-chaudhary-aa062a231/' },
   { name: 'Twitter', icon: TwitterIcon, url: 'https://x.com/thats_5ush' },
+];
+
+const footerSocials: FooterSocialItem[] = [
+  {
+    label: 'GitHub',
+    href: 'https://github.com/sush8471',
+    icon: <GithubIcon size={18} />,
+  },
+  {
+    label: 'X',
+    href: 'https://x.com/thats_5ush',
+    icon: <TwitterIcon size={18} />,
+  },
+  {
+    label: 'LinkedIn',
+    href: 'https://www.linkedin.com/in/sushant-chaudhary-aa062a231/',
+    icon: <LinkedinIcon size={18} />,
+  },
 ];
 
 const ContactSection = () => {
@@ -70,7 +90,7 @@ const ContactSection = () => {
     <section
       id="contact"
       ref={sectionRef}
-      className="relative z-10 bg-black px-6 py-32 md:px-12 lg:px-24"
+      className="relative z-10 bg-black px-6 pt-24 pb-3 md:px-12 md:pt-32 md:pb-4 lg:px-24"
     >
       {/* Ambient background glow */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
@@ -143,22 +163,14 @@ const ContactSection = () => {
           </div>
         </div>
 
-        {/* Footer */}
-        <footer className="mt-32 border-t border-zinc-900 pt-10">
-          <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
-            <p className="text-sm text-zinc-600">
-              © {new Date().getFullYear()} Portfolio. Crafted with precision.
-            </p>
-            <div className="flex gap-8">
-              <button
-                onClick={openResume}
-                className="text-sm text-zinc-500 transition-colors hover:text-white"
-              >
-                View Resume
-              </button>
-            </div>
-          </div>
-        </footer>
+        {/* Footer with Signature */}
+        <FooterSignature
+          signature="Being Sushant"
+          signatureLabel="Signed, Being Sushant"
+          socials={footerSocials}
+          copyright={`© ${new Date().getFullYear()} Sushant`}
+          className="mt-20 border-zinc-900 bg-transparent px-0 pt-6 pb-2"
+        />
       </div>
     </section>
   );
