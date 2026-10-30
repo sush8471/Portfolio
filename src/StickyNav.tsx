@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useResumeViewer } from './ResumeViewerContext';
 import { scrollToSection } from './scrollToSection';
+import { TabsSubtle, TabsSubtleItem } from '@/components/ui/tabs-subtle';
 
 const navItems = [
   { label: 'About', href: '#about' },
@@ -8,11 +9,62 @@ const navItems = [
   { label: 'Certifications', href: '#certifications' },
   { label: 'Projects', href: '#work' },
   { label: 'Contact', href: '#contact' },
-];
+] as const;
 
 const StickyNav = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState<string>('#about');
   const { openResume } = useResumeViewer();
+
+  // Scroll spy to update activeSection as user scrolls through sections
+  useEffect(() => {
+    let ticking = false;
+
+    const handleScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const scrollPos = window.scrollY + 200;
+
+          // If scrolled near bottom of page, highlight Contact
+          if (
+            window.innerHeight + window.scrollY >=
+            document.documentElement.scrollHeight - 80
+          ) {
+            setActiveSection('#contact');
+            ticking = false;
+            return;
+          }
+
+          // If at the very top, highlight About
+          if (window.scrollY < 120) {
+            setActiveSection('#about');
+            ticking = false;
+            return;
+          }
+
+          for (let i = navItems.length - 1; i >= 0; i--) {
+            const item = navItems[i];
+            if (!item) continue;
+            const el = document.querySelector(item.href);
+            if (el) {
+              const top = el.getBoundingClientRect().top + window.scrollY;
+              if (scrollPos >= top) {
+                setActiveSection(item.href);
+                break;
+              }
+            }
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : '';
@@ -38,6 +90,7 @@ const StickyNav = () => {
   ) => {
     e.preventDefault();
     setMenuOpen(false);
+    setActiveSection(href);
     requestAnimationFrame(() => scrollToSection(href));
   };
 
@@ -50,6 +103,7 @@ const StickyNav = () => {
             onClick={(e) => {
               e.preventDefault();
               setMenuOpen(false);
+              setActiveSection('#about');
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
             className="text-sm font-bold tracking-tight text-white"
@@ -57,21 +111,29 @@ const StickyNav = () => {
             SC<span className="text-zinc-500">.</span>
           </a>
 
-          {/* Desktop nav */}
-          <div className="hidden items-center gap-6 md:flex">
-            {navItems.map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                onClick={(e) => handleNavClick(e, item.href)}
-                className="text-xs font-medium uppercase tracking-wider text-zinc-500 transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30 rounded"
-              >
-                {item.label}
-              </a>
-            ))}
+          {/* Desktop nav with TabsSubtle (No outer box, sliding inner active box) */}
+          <div className="hidden items-center gap-4 md:flex">
+            <TabsSubtle
+              value={activeSection}
+              onValueChange={(val) => {
+                setActiveSection(val);
+                requestAnimationFrame(() => scrollToSection(val));
+              }}
+              className="bg-transparent p-0 gap-1 border-none shadow-none overflow-visible"
+            >
+              {navItems.map((item) => (
+                <TabsSubtleItem
+                  key={item.href}
+                  value={item.href}
+                  label={item.label}
+                  className="px-3.5 py-1.5 text-xs font-medium uppercase tracking-wider"
+                />
+              ))}
+            </TabsSubtle>
+
             <button
               onClick={openResume}
-              className="rounded-full border border-zinc-700 bg-zinc-900 px-4 py-1.5 text-xs font-semibold text-white transition-all duration-300 hover:border-white hover:bg-white hover:text-black"
+              className="ml-2 rounded-full border border-zinc-700 bg-zinc-900 px-4 py-1.5 text-xs font-semibold text-white transition-all duration-300 hover:border-white hover:bg-white hover:text-black"
             >
               Resume
             </button>
@@ -143,7 +205,11 @@ const StickyNav = () => {
                   key={item.href}
                   href={item.href}
                   onClick={(e) => handleNavClick(e, item.href)}
-                  className="rounded-xl px-3 py-3 text-sm font-semibold text-white transition-colors active:bg-zinc-900 hover:bg-zinc-900/80 hover:text-zinc-200"
+                  className={`rounded-xl px-3 py-3 text-sm font-semibold transition-colors ${
+                    activeSection === item.href
+                      ? 'bg-zinc-900 text-white'
+                      : 'text-zinc-400 hover:bg-zinc-900/80 hover:text-zinc-200'
+                  }`}
                 >
                   {item.label}
                 </a>
