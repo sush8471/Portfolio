@@ -21,6 +21,13 @@
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
 
+    // Path aliases
+    "ignoreDeprecations": "6.0",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+
     // Some stricter flags (disabled by default)
     "noUnusedLocals": false,
     "noUnusedParameters": false,

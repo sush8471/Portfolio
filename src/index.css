@@ -1,5 +1,24 @@
 @import "tailwindcss";
 
+:root {
+  --color-bg: #000000;
+  --color-fg: #ffffff;
+  --color-muted: #a1a1aa;
+  --color-surface: rgba(255, 255, 255, 0.05);
+  --color-border: rgba(255, 255, 255, 0.1);
+  --color-accent: #60a5fa;
+  --font-handwriting: 'Caveat', cursive;
+  --motion-dur-fast: 150ms;
+  --motion-dur-instant: 60ms;
+  --motion-dur-showcase: 700ms;
+  --motion-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.mask-x-from-85\% {
+  mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+}
+
 html, body {
     margin: 0;
     padding: 0;
