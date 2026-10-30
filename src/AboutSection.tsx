@@ -5,14 +5,14 @@ import { usePrefersReducedMotion } from './usePrefersReducedMotion';
 import { useResumeViewer } from './ResumeViewerContext';
 import { scrollToSection } from './scrollToSection';
 
+const stack = ['Python', 'TypeScript', 'React', 'Supabase', 'Vercel', 'AI/ML APIs'];
+
 const stats = [
   { value: '2', label: 'Full Products Shipped' },
   { value: '4', label: 'AI Prototypes Built' },
   { value: '5', label: 'Certifications' },
   { value: '3+', label: 'Years Building' },
 ];
-
-const stack = ['Python', 'TypeScript', 'React', 'Supabase', 'Vercel', 'AI/ML APIs'];
 
 const AboutSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
@@ -82,37 +82,19 @@ const AboutSection = () => {
       className="relative z-10 bg-black px-6 py-24 text-white"
     >
       <div className="mx-auto max-w-6xl">
-        {/* 1. HEADLINE + STATUS */}
-        <div
-          ref={headerRef}
-          className="mb-16 flex flex-col md:flex-row md:items-end md:justify-between"
-        >
-          <div>
-            <p className="mb-4 text-sm uppercase tracking-[0.2em] text-zinc-400">
-              About
-            </p>
-            <h2
-              className="text-5xl font-normal leading-none tracking-tight md:text-7xl"
-              style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
-            >
-              Engineering intelligence.
-              <br />
-              <span className="text-zinc-400">Designing interactions.</span>
-            </h2>
-          </div>
-
-          {/* Status Badge */}
-          <div className="mt-6 flex w-fit items-center gap-2 rounded-full border border-green-500/20 bg-green-500/10 px-3 py-1.5 md:mt-0 md:px-4 md:py-2">
-            <span className="relative flex h-2.5 w-2.5 md:h-3 md:w-3">
-              {!reducedMotion && (
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
-              )}
-              <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-green-500 md:h-3 md:w-3" />
-            </span>
-            <span className="text-xs font-medium text-green-400 md:text-sm">
-              Open to SDE Internships
-            </span>
-          </div>
+        {/* 1. HEADLINE */}
+        <div ref={headerRef} className="mb-16">
+          <p className="mb-4 text-sm uppercase tracking-[0.2em] text-zinc-400">
+            About
+          </p>
+          <h2
+            className="text-5xl font-normal leading-none tracking-tight md:text-7xl"
+            style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
+          >
+            Engineering intelligence.
+            <br />
+            <span className="text-zinc-400">Designing interactions.</span>
+          </h2>
         </div>
 
         <div ref={contentRef}>
